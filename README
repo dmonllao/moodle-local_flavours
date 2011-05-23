@@ -1,0 +1,25 @@
+##
+# Moodle flavours
+#
+# @link http://docs.moodle.org/en/Development:Moodle_flavours Documentation
+# @link http://tracker.moodle.org/browse/CONTRIB-2948 Moodle tracker entry
+# @link https://github.com/dmonllao/moodle-local_flavours Source Code 
+# @license http://www.gnu.org/licenses/gpl-2.0.txt
+##
+
+INTRODUCTION
+Allows Moodle administrators to package and deploy sets of Moodle plugins, site settings, language packs... (see http://docs.moodle.org/en/Development:Moodle_flavours for more info)
+
+DESCRIPTION
+A flavour is a packaged set of Moodle site settings, plugins and language packs. Moodle Administrators will be able to create a flavour from their installation, selecting which settings, plugins and language packs will be packaged into a compressed file. They can then, share the package with the Moodle community, store it as a backup or use it to replicate the flavour to other installations they manages. It could also be useful for administrators with little Moodle experienced, allowing them to explore the Moodle settings and setup recommended by others. 
+
+INSTALL FROM GIT
+- Navigate to Moodle root folder
+- git clone git://github.com/dmonllao/moodle-local_flavours local/flavours
+
+INSTALL FROM A COMPRESSED FILE
+- Extract the compressed file data
+- Rename the main folder to flavours
+- Copy to local/ folder
+- Click 'Notifications' link on the frontpage administration blocks
+

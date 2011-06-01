@@ -12,6 +12,13 @@ require_login();
 require_capability('moodle/site:config', get_context_instance(CONTEXT_SYSTEM));
 // TODO: Add sesskey checking
 
+$context = get_context_instance(CONTEXT_SYSTEM);
+
+$url = new moodle_url('/local/flavours/index.php');
+$url->param('action', $action);
+$PAGE->set_url($url);
+$PAGE->set_context($context);
+
 // Calling the appropiate class
 if (strstr($action, 'packaging') != false) {
     $classname = 'flavours_packaging';

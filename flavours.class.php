@@ -16,9 +16,7 @@ abstract class flavours {
         global $CFG;
         
         $this->action = $action;
-        
         $this->url = $CFG->wwwroot.'/local/flavours/index.php';
-        $this->langfile = 'local_flavours';
     }
     
     
@@ -27,10 +25,10 @@ abstract class flavours {
 	    global $PAGE, $OUTPUT, $SITE;
 	    
 	    $actualsettingspage = array_shift(explode('_', $this->action));
-	    admin_externalpage_setup($this->langfile.'_'.$actualsettingspage);
+	    admin_externalpage_setup('local_flavours_'.$actualsettingspage);
 	        
 	    $PAGE->set_heading($SITE->fullname);
-	    $PAGE->set_title(get_string('action'.$this->action, $this->langfile));
+	    $PAGE->set_title(get_string('action'.$this->action, 'local_flavours'));
 	        
 	    return $OUTPUT->header();
 	}

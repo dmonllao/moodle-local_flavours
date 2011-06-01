@@ -21,8 +21,6 @@ class flavours_packaging_form extends moodleform {
         $mform->setType('author', PARAM_TEXT);
         $mform->setDefault('author', $USER->firstname.' '.$USER->lastname);
         
-        
-        
         $mform->addElement('submit', 'admin_presets_submit', get_string('packageflavour', 'local_flavours'));
     }
 }

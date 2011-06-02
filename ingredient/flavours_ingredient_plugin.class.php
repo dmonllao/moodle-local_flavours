@@ -17,8 +17,8 @@ class flavours_ingredient_plugin extends flavours_ingredient {
      * Sets the ingredient name and identifier
      */
     public function __construct() {
-        $this->branch->id = 'plugin';
-        $this->branch->name = get_string('plugin');
+        $this->id = 'plugin';
+        $this->name = get_string('plugin');
     }
     
 
@@ -30,18 +30,18 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         $plugintypes = get_plugin_types();
         foreach ($plugintypes as $type => $path) {
             
-            $this->branch->branches[$type]->id = $type;
+            $this->branches[$type]->id = $type;
             
             // TODO: Replace for a text string
-            $this->branch->branches[$type]->name = $type;
+            $this->branches[$type]->name = $type;
             
             $plugins = get_plugin_list($type);
             foreach ($plugins as $pluginname => $pluginpath) {
                 
-                $this->branch->branches[$type]->branches[$pluginname]->id = $pluginname;
+                $this->branches[$type]->branches[$pluginname]->id = $pluginname;
                 
                 // TODO: Find a good way to get the correct plugin names
-                $this->branch->branches[$type]->branches[$pluginname]->name = $pluginname;
+                $this->branches[$type]->branches[$pluginname]->name = $pluginname;
 //                $this->branches[$type]->branches[$pluginname]->name = get_string('pluginname', $type.'_'.$pluginname);
             }
         }

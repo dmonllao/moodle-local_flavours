@@ -17,8 +17,8 @@ class flavours_ingredient_setting extends flavours_ingredient {
      * Sets the ingredient name and identifier
      */
     public function __construct() {
-        $this->branch->id = 'setting';
-        $this->branch->name = get_string('settings');
+        $this->id = 'setting';
+        $this->name = get_string('settings');
     }
     
     
@@ -28,7 +28,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
      */
     public function get_system_data() { 
         $adminroot = & admin_get_root(false, true);
-        $this->get_branch_settings($adminroot->children, $this->branch);
+        $this->get_branch_settings($adminroot->children, $this);
     }
     
 

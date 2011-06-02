@@ -25,15 +25,13 @@ if (strstr($action, 'packaging') != false) {
 } else {
     $classname = 'flavours_deployment';
 }
-$class = new $classname($action);
+$instance = new $classname($action);
 
 // Process the action
-if (!method_exists($class, $action)) {
+if (!method_exists($instance, $action)) {
     print_error('actionnotsupported', 'local_flavours');
 }
-$class->process_wrapper();
+$instance->process_wrapper();
 
 // Output
-echo $class->print_header();
-echo $class->display();
-echo $OUTPUT->footer();
+$instance->display();

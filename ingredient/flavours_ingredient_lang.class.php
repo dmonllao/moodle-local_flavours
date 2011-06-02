@@ -19,11 +19,11 @@ class flavours_ingredient_lang extends flavours_ingredient {
      */
     public function __construct() {
         
-        $this->branch->id = 'lang';
+        $this->id = 'lang';
         
         // TODO: Find the correct string
 //        $this->name = get_string('lang');
-        $this->branch->name = 'Languages';
+        $this->name = 'Languages';
     }
     
 
@@ -34,8 +34,8 @@ class flavours_ingredient_lang extends flavours_ingredient {
         
         $langs = get_string_manager()->get_list_of_translations();
         foreach ($langs as $lang => $langname) {
-            $this->branch->branches[$lang]->id = $lang;
-            $this->branch->branches[$lang]->name = $langname;
+            $this->branches[$lang]->id = $lang;
+            $this->branches[$lang]->name = $langname;
         }
     }
     

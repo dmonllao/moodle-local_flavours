@@ -47,7 +47,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
                 if ($child->children) {
                     $branch->branches[$child->name]->id = $child->name;
-                    $branch->branches[$child->name]->name = $child->name;
+                    $branch->branches[$child->name]->name = $child->visiblename;
 
                     // Adding branch branches
                     $this->get_branch_settings($child->children, $branch->branches[$child->name]);

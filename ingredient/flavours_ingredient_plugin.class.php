@@ -40,9 +40,16 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                 
                 $this->branches[$type]->branches[$pluginname]->id = $pluginname;
                 
-                // TODO: Find a good way to get the correct plugin names
-                $this->branches[$type]->branches[$pluginname]->name = $pluginname;
-//                $this->branches[$type]->branches[$pluginname]->name = get_string('pluginname', $type.'_'.$pluginname);
+                // Not all the Moodle plugins follows the "pluginname" convention so let's 
+                // display the plugin string identifier instead of the human readable pluginname
+                $component = $type.'_'.$pluginname;
+                if (!get_string_manager()->string_exists('pluginname', $component)) {
+                    $pluginvisiblename = $pluginname;
+                } else {
+                    $pluginvisiblename = get_string('pluginname', $component);
+                }
+                
+                $this->branches[$type]->branches[$pluginname]->name = $pluginvisiblename;
             }
         }
     }

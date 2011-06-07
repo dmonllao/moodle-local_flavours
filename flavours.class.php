@@ -24,14 +24,16 @@ abstract class flavours {
     /**
      * Creates the tree structure based on $this->ingredients
      * 
-     * @return array
+     * @return array The tree html following the TreeView structure
      */
     protected function get_tree_ingredients() {
         
         global $PAGE;
 
         $treedata = '<ul>';
-        foreach ($this->ingredients as $prefix => $branch) {
+        foreach ($this->ingredients as $ingredienttype => $branch) {
+            
+            $prefix = 'ingredient/'.$ingredienttype;
             $this->get_tree_data($treedata, $branch, $prefix);
         }
         $treedata .= '</ul>';
@@ -40,6 +42,13 @@ abstract class flavours {
     }
     
     
+    /**
+     * Gets the html to display the tree
+     * 
+     * @param string $output
+     * @param object $branch
+     * @param string $prefix
+     */
     protected function get_tree_data(&$output, $branch, $prefix) {
         
         $output .= '<li>';
@@ -51,16 +60,17 @@ abstract class flavours {
             // To identify that branch/leaf and pass it through his branches
             $branchprefix = $prefix.'/'.$data->id;
             
+            // If it does not have children it's a leaf
             if (empty($data->branches)) {
-	            $output .= '<li id="'.$branchprefix.'">';
-	            $output .= $data->name;
-	            $output .= '</li>';
+                $output .= '<li><a target="'.$branchprefix.'">'.$data->name.'</a></li>';
+                
+            // Let's get the branch children
             } else {
                 $this->get_tree_data($output, $data, $branchprefix);
             } 
         }
-        $output .= '</ul>';
         
+        $output .= '</ul>';
         $output .= '</li>';
     }
     

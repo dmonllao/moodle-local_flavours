@@ -38,5 +38,16 @@ class flavours_ingredient_lang extends flavours_ingredient {
             $this->branches[$lang]->name = $langname;
         }
     }
+
+    
+    /**
+     * 
+     * @param xml_writer $xmlwriter The XML writer, by reference
+     * @param string $path Where to store the data
+     * @param array $ingredientsdata Ingredients to store
+     */
+    public function package_ingredients(&$xmlwriter, $path, $ingredientsdata) {
+        
+    }
     
 }

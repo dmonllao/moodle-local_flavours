@@ -33,6 +33,17 @@ class flavours_ingredient_setting extends flavours_ingredient {
     
 
     /**
+     *
+     * @param xml_writer $xmlwriter The XML writer, by reference 
+     * @param string $path Where to store the data
+     * @param array $ingredientsdata Ingredients to store
+     */
+    public function package_ingredients(&$xmlwriter, $path, $ingredientsdata) {
+        
+    }
+    
+    
+    /**
      * Iterates through the moodle admin tree to extract the settings categories & pages hierarchy
      * 
      * @param object $admintreebranch

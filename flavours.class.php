@@ -90,6 +90,8 @@ abstract class flavours {
      */
     protected function instance_ingredient_type($type) {
         
+        global $CFG;
+        
         $classname = 'flavours_ingredient_'.$type;
         $filepath = dirname(__FILE__) . '/ingredient/'.$classname.'.class.php';
         if (!file_exists($filepath)) {

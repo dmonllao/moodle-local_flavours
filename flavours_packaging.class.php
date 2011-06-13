@@ -79,7 +79,7 @@ class flavours_packaging extends flavours {
 	        }
 
 	        // Adding the selected ingredients data
-	        $xmlwriter->begin_tag('ingredienttypes');
+	        $xmlwriter->begin_tag('ingredient');
             foreach ($selectedingredients as $ingredienttype => $ingredientsdata) {
                 
 	            // instance_ingredient_type gets a new flavours_ingredient_* object
@@ -88,7 +88,7 @@ class flavours_packaging extends flavours {
 	            // It executes the ingredient type specific actions to package
 	            $type->package_ingredients($xmlwriter, $flavourpath, $ingredientsdata);
             }
-            $xmlwriter->end_tag('ingredienttypes');
+            $xmlwriter->end_tag('ingredient');
 
             // Finishing flavour index
             $xmlwriter->end_tag('flavour');

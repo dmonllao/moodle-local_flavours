@@ -7,6 +7,7 @@ $string['actiondeployment_upload'] = 'Flavours Deployment - Upload a flavour';
 $string['actionpackaging_form'] = 'Flavours Packaging';
 $string['actionpackaging_execute'] = 'Flavours Packaging';
 $string['deploy'] = 'Deploy a flavour';
+$string['errorcopying'] = 'Error copying ingredients';
 $string['errorpackaging'] = 'Error packaging the flavour';
 $string['flavourauthor'] = 'Author';
 $string['flavourdata'] = 'Flavour data';

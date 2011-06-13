@@ -78,18 +78,24 @@ class flavours_packaging extends flavours {
                 print_error('errorpackaging', 'local_flavours');
 	        }
 
+	        
 	        // Adding the selected ingredients data
 	        $xmlwriter->begin_tag('ingredient');
             foreach ($selectedingredients as $ingredienttype => $ingredientsdata) {
                 
-	            // instance_ingredient_type gets a new flavours_ingredient_* object
+                // instance_ingredient_type gets a new flavours_ingredient_* object
 	            $type = $this->instance_ingredient_type($ingredienttype);
+
+	            $xmlwriter->begin_tag($type->id);
 	            
 	            // It executes the ingredient type specific actions to package
 	            $type->package_ingredients($xmlwriter, $flavourpath, $ingredientsdata);
+	            
+	            $xmlwriter->end_tag($type->id);
             }
             $xmlwriter->end_tag('ingredient');
 
+            
             // Finishing flavour index
             $xmlwriter->end_tag('flavour');
             $xmlwriter->stop();

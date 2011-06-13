@@ -1,13 +1,13 @@
 <?php 
 
-
 /**
- * Wrapps the tool actions
+ * Common methods
  */
 abstract class flavours {
 
     protected $action;
     protected $url;
+    protected $flavourstmpfolder; 
     
     protected $output;
     protected $form;
@@ -18,6 +18,12 @@ abstract class flavours {
         
         $this->action = $action;
         $this->url = $CFG->wwwroot.'/local/flavours/index.php';
+        $this->flavourstmpfolder = $CFG->dataroot.'/temp/flavours';
+        
+        // Ensure that the flavours temp folder exists
+        if (!file_exists($this->flavourstmpfolder)) {
+            mkdir($this->flavourstmpfolder, $CFG->directorypermissions);
+        }
     }
     
 
@@ -77,6 +83,25 @@ abstract class flavours {
     
     
     /**
+     * Returns a new instance of a ingredient_type
+     * 
+     * @param string $type The ingredient type
+     * @param flavours_ingredient $type
+     */
+    protected function instance_ingredient_type($type) {
+        
+        $classname = 'flavours_ingredient_'.$type;
+        $filepath = dirname(__FILE__) . '/ingredient/'.$classname.'.class.php';
+        if (!file_exists($filepath)) {
+            print_error('ingredienttypenotavailable', 'local_flavours');
+        }
+            
+        // Getting the system ingredients of that type 
+        require_once($filepath);
+        
+        return new $classname();
+    }
+    /**
      * Sets the page info and returns the header to output
      */
     public function print_header() {
@@ -109,4 +134,38 @@ abstract class flavours {
         echo $OUTPUT->footer();
     }
     
+    
+    /**
+     * Extracts the selected ingredients from $_POST
+     * @return array The selected ingredients organized by ingredient type
+     */
+    public function get_ingredients_from_form() {
+        
+        if (empty($_POST)) {
+            return false;
+        }
+        
+        // Looking for selected ingredients and the ingredient type
+        foreach ($_POST as $varname => $enabled) {
+            
+            if (strstr($varname, '/') == false) {
+                continue;
+            }
+            
+            $namespace = explode('/', $varname);
+            if (array_shift($namespace) == 'ingredient') {
+                
+                $ingredienttype = array_shift($namespace);
+                
+                // TODO: Ensure $namespace values are only a-zA-Z_
+                $ingredientpath = implode('/', $namespace);
+                
+                // Only organized by ingredient type, each type will  
+                // treat his ingredients on a different way
+                $ingredients[$ingredienttype][$ingredientpath] = $ingredientpath;
+            }
+        }
+        
+        return $ingredients;
+    }
 }

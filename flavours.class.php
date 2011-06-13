@@ -32,7 +32,8 @@ abstract class flavours {
 
         $treedata = '<ul>';
         foreach ($this->ingredients as $ingredienttype => $branch) {
-            
+
+            // A main ingredient/ namespace to ease the ingredients detection
             $prefix = 'ingredient/'.$ingredienttype;
             $this->get_tree_data($treedata, $branch, $prefix);
         }
@@ -72,14 +73,6 @@ abstract class flavours {
         
         $output .= '</ul>';
         $output .= '</li>';
-    }
-    
-    
-    /**
-     * @todo Remove if not necessary
-     */
-    public function process_wrapper() {
-        $this->{$this->action}();
     }
     
     

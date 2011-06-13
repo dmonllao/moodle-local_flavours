@@ -31,7 +31,7 @@ $instance = new $classname($action);
 if (!method_exists($instance, $action)) {
     print_error('actionnotsupported', 'local_flavours');
 }
-$instance->process_wrapper();
+$instance->$action();
 
 // Output
 $instance->display();

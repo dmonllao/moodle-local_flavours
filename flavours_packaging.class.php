@@ -5,15 +5,15 @@ require_once(dirname(__FILE__) . '/forms/flavours_packaging_form.php');
 
 class flavours_packaging extends flavours {
     
-    protected function packaging_form() {
+    // TODO: Allow the ingredients types addition without code edition
+    private $ingredienttypes = array('setting', 'plugin', 'lang');
+    
+    public function packaging_form() {
         
         global $CFG, $PAGE;
         
         // Getting the ingredient types data
-        
-        // TODO: Allow the ingredients types addition without code edition
-        $types = array('setting', 'plugin', 'lang');
-        foreach ($types as $type) {
+        foreach ($this->ingredienttypes as $type) {
             
             // Ingredient type
             $classname = 'flavours_ingredient_'.$type;
@@ -43,7 +43,7 @@ class flavours_packaging extends flavours {
     }
     
     
-    protected function packaging_execute() {
+    public function packaging_execute() {
         notify(print_r($_REQUEST));
         $this->output = 'I\'ll be a tasty compressed file';
     }

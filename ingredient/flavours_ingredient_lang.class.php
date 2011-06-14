@@ -1,6 +1,5 @@
 <?php 
 
-require_once(dirname(__FILE__) . '/../../../backup/lib.php');
 require_once(dirname(__FILE__) . '/flavours_ingredient.class.php');
 
 
@@ -56,33 +55,32 @@ class flavours_ingredient_lang extends flavours_ingredient {
             return false;
         }
             
-        mkdir($path.'/lang', $CFG->directorypermissions);
-            
-        $xmlwriter->begin_tag('lang');
+        mkdir($path . '/' . $this->id, $CFG->directorypermissions);
+
         foreach ($ingredientsdata as $langid) {
 
             // All the languages are stored in dataroot, english is the only exception AFAIK
-            $frompath = $CFG->dataroot.'/lang/'.$langid;
-            if (!file_exists($path)) {
-                $frompath = $CFG->dirroot.'/lang/'.$langid;
+            $frompath = $CFG->dataroot . '/lang/' . $langid;
+            if (!file_exists($frompath)) {
+                $frompath = $CFG->dirroot . '/lang/' . $langid;
             }
                 
             // Recursive copy
-            $topath = $path.'/lang/'.$langid;
-            if (!backup_copy_file($frompath, $topath)) {
+            $topath = $path . '/lang/' . $langid;
+            if (!$this->copy($frompath, $topath)) {
+                debugging($frompath);
+                debugging($topath);
                 print_error('errorcopying', 'local_flavours');
             }
             $language = get_string_manager()->load_component_strings('langconfig', $langid);
             $xmlwriter->begin_tag($langid);
             $xmlwriter->full_tag('name', $language['thislanguage']);
-            $xmlwriter->full_tag('path', 'lang/'.$langid);
+            $xmlwriter->full_tag('path', 'lang/' . $langid);
                 
             // Moodle doesn't have a language versioning system
 //            $xmlwriter->full_tag('version', ...);
             $xmlwriter->end_tag($langid);
         }
-            
-        $xmlwriter->end_tag('lang');
         
         return true;
     }

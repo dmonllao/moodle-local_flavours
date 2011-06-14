@@ -11,11 +11,20 @@
  */
 abstract class flavours_ingredient {
     
+    
     /**
-     * The number of whitespaces to add before starting the xml tags output
-     * @var integer
+     * Ingredient type id
+     * @var string
      */
-    protected $prefix = 4;
+    public $id;
+    
+    
+    /**
+     * Name given to the ingredient type, to identify it on the ingredients tree
+     * @var string
+     */
+    public $name;
+    
     
     /**
      * Gets the an ingredients list with the ingredients availables on the system 
@@ -31,4 +40,58 @@ abstract class flavours_ingredient {
      * @param string $path Where to store the flavour tmp files
      */
     abstract public function package_ingredients(&$xmlwriter, $ingredients, $path);
+    
+    
+    /**
+     * Support function - copied from backup/lib.php and adapted to avoid SCV files
+     * 
+     * @param string $from
+     * @param string $to
+     * @return boolean Feedback
+     */
+    protected function copy($from,$to) {
+        
+        global $CFG;
+
+        if (!file_exists($from)) {
+            return false;
+        }
+        
+        // SCV systems to avoid
+        $scvs = array('.git', 'CVS', '.svn');
+        $scvsdirs = array_combine($scvs, $scvs);
+        
+        $status = true; // Initialize this, next code will change its value if needed
+        
+        if (is_file($from)) {
+            umask(0000);
+            if (!copy($from,$to)) {
+                $status = false;
+            } else {
+                chmod($to, $CFG->directorypermissions);
+                $status = true;
+            }
+            
+        } else {
+            
+	        if (!is_dir($to)) {
+	            umask(0000);
+	            $status = mkdir($to, $CFG->directorypermissions);
+	        }
+	        
+	        $dir = opendir($from);
+	        while (false !== ($file=readdir($dir))) {
+	            
+	            // We don't want SCVS files
+	            if ($file=="." || $file==".." || !empty($scvsdirs[$file])) {
+	                continue;
+	            }
+	            $status = $this->copy("$from/$file","$to/$file");
+	        }
+            closedir($dir);
+        }
+        
+        return $status;
+    }
+
 }

@@ -74,20 +74,20 @@ abstract class flavours_ingredient {
             
         } else {
             
-	        if (!is_dir($to)) {
-	            umask(0000);
-	            $status = mkdir($to, $CFG->directorypermissions);
-	        }
-	        
-	        $dir = opendir($from);
-	        while (false !== ($file=readdir($dir))) {
-	            
-	            // We don't want SCVS files
-	            if ($file=="." || $file==".." || !empty($scvsdirs[$file])) {
-	                continue;
-	            }
-	            $status = $this->copy("$from/$file","$to/$file");
-	        }
+            if (!is_dir($to)) {
+                umask(0000);
+                $status = mkdir($to, $CFG->directorypermissions);
+            }
+            
+            $dir = opendir($from);
+            while (false !== ($file=readdir($dir))) {
+                
+                // We don't want SCVS files
+                if ($file=="." || $file==".." || !empty($scvsdirs[$file])) {
+                    continue;
+                }
+                $status = $this->copy("$from/$file","$to/$file");
+            }
             closedir($dir);
         }
         

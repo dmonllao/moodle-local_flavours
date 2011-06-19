@@ -9,6 +9,7 @@ $string['actionpackaging_execute'] = 'Flavours Packaging';
 $string['deploy'] = 'Deploy a flavour';
 $string['errorcopying'] = 'Error copying ingredients';
 $string['errorpackaging'] = 'Error packaging the flavour';
+$string['errorunknownsettingspage'] = 'Unknown settings page';
 $string['flavourauthor'] = 'Author';
 $string['flavourdata'] = 'Flavour data';
 $string['flavourdescription'] = 'Description';
@@ -18,3 +19,4 @@ $string['package'] = 'Package a flavour';
 $string['packageflavour'] = 'Package';
 $string['pluginname'] = 'Flavours';
 $string['selectingredients'] = 'Select ingredients';
+

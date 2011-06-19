@@ -10,7 +10,7 @@ require_once(dirname(__FILE__) . '/forms/flavours_packaging_form.php');
 
 class flavours_packaging extends flavours {
     
-    // TODO: Allow the ingredients types addition without code edition (a new setting for exmaple)
+    // TODO: Allow the ingredients types addition without code edition (opendir ingredient/ maybe)
     private $ingredienttypes = array('setting', 'plugin', 'lang');
     
     public function packaging_form() {

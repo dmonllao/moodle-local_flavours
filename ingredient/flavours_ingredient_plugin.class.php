@@ -132,7 +132,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                 $xmlwriter->begin_tag($ingredient);
                 $xmlwriter->full_tag('name', $this->get_system_plugin_visiblename($plugintype, $ingredient));
                 $xmlwriter->full_tag('flavourpath', $this->id . '/' . $plugintype . '/' . $ingredient);
-                $xmlwriter->full_tag('moodlepath', $plugintypebasepath . '/' . $ingredient);
+                $xmlwriter->full_tag('moodlepath', ltrim($plugintypebasepath, '/') . '/' . $ingredient);
                 
                 // The plugin version and required moodle version
                 $pluginversion = $this->get_system_plugin_version($plugintypepath . '/' . $ingredient);

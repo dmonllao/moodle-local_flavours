@@ -61,7 +61,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                     $pluginvisiblename = $this->get_system_plugin_visiblename($type, $pluginname);
                     $this->branches[$type]->branches[$pluginname]->name = $pluginvisiblename;
                 }
-                
+
                 // Only if there is non core plugins
                 if (empty($this->branches[$type]->branches)) {
                     continue;
@@ -109,7 +109,6 @@ class flavours_ingredient_plugin extends flavours_ingredient {
             $plugintypebasepath = str_replace($CFG->dirroot, '', $plugintypepath);
             $plugintypeflavourpath = str_replace(rtrim($CFG->dirroot, '/'), $path . '/' . $this->id, $plugintypepath);
             
-            // TODO: Avoid core plugins and it will be solved
             if (!mkdir($plugintypeflavourpath, $CFG->directorypermissions, true)) {
                 debugging($plugintypeflavourpath);
                 continue;

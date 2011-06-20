@@ -52,7 +52,7 @@ class flavours_packaging extends flavours {
         if (!$selectedingredients) {
             redirect($this->url, get_string('nothingselected', 'local_flavours'), 2);
         }
-            
+
         // Flavour data
         $form = new flavours_packaging_form($this->url);
         if (!$data = $form->get_data()) {

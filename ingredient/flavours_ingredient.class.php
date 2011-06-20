@@ -38,6 +38,7 @@ abstract class flavours_ingredient {
      * @param xml_writer $xmlwriter The XML writer, by reference
      * @param array $ingredients The ingredients to store
      * @param string $path Where to store the flavour tmp files
+     * @return boolean Not treated but true if it adds something
      */
     abstract public function package_ingredients(&$xmlwriter, $ingredients, $path);
     

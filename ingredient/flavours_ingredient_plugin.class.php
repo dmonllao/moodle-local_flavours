@@ -1,7 +1,7 @@
 <?php 
 
-require_once(dirname(__FILE__) . '/../../../lib/pluginlib.php');
-require_once(dirname(__FILE__) . '/flavours_ingredient.class.php');
+require_once($CFG->dirroot . '/lib/pluginlib.php');
+require_once($CFG->dirroot . '/local/flavours/ingredient/flavours_ingredient.class.php');
 
 /**
  * Manages the packaging and deployment of all the moodle plugins

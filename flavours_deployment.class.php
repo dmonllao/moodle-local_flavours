@@ -1,6 +1,6 @@
 <?php 
 
-require_once(dirname(__FILE__) . '/flavours.class.php');
+require_once($CFG->dirroot . '/local/flavours/flavours.class.php');
 
 class flavours_deployment extends flavours {
     

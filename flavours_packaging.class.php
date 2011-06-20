@@ -5,8 +5,8 @@ require_once($CFG->dirroot.'/backup/util/xml/xml_writer.class.php');
 require_once($CFG->dirroot.'/backup/util/xml/output/xml_output.class.php');
 require_once($CFG->dirroot.'/backup/util/xml/output/memory_xml_output.class.php');
 
-require_once(dirname(__FILE__) . '/flavours.class.php');
-require_once(dirname(__FILE__) . '/forms/flavours_packaging_form.php');
+require_once($CFG->dirroot . '/local/flavours/flavours.class.php');
+require_once($CFG->dirroot . '/local/flavours/forms/flavours_packaging_form.php');
 
 class flavours_packaging extends flavours {
     
@@ -49,78 +49,78 @@ class flavours_packaging extends flavours {
         
         // Getting selected data
         $selectedingredients = $this->get_ingredients_from_form();
-        if ($selectedingredients) {
-            
-            // Flavour data
-            $form = new flavours_packaging_form($this->url);
-            if (!$data = $form->get_data()) {
-                print_error('errorpackaging', 'local_flavours');
-            }
-            
-            // Starting <xml>
-            // TODO: Replace for file_xml_output()
-            $xmloutput = new memory_xml_output();
-            $xmlwriter = new xml_writer($xmloutput);
-            $xmlwriter->start();
-            $xmlwriter->begin_tag('flavour');
-            $xmlwriter->full_tag('name', $data->name);
-            $xmlwriter->full_tag('description', $data->description);
-            $xmlwriter->full_tag('author', $data->author);
-            $xmlwriter->full_tag('timecreated', time());
-            $xmlwriter->full_tag('moodlerelease', $CFG->release);
-            $xmlwriter->full_tag('moodleversion', $CFG->version);
-            
-            // Random code to store the flavour data
-            $hash = sha1('flavour_'.$USER->id.'_'.time());
-            $flavourpath = $this->flavourstmpfolder.'/'.$hash;
-
-            if (file_exists($flavourpath) || !mkdir($flavourpath, $CFG->directorypermissions)) {
-                print_error('errorpackaging', 'local_flavours');
-            }
-
-            
-            // Adding the selected ingredients data
-            $xmlwriter->begin_tag('ingredient');
-            foreach ($selectedingredients as $ingredienttype => $ingredientsdata) {
-                
-                // instance_ingredient_type gets a new flavours_ingredient_* object
-                $type = $this->instance_ingredient_type($ingredienttype);
-
-                $xmlwriter->begin_tag($type->id);
-                
-                // It executes the ingredient type specific actions to package
-                $type->package_ingredients($xmlwriter, $flavourpath, $ingredientsdata);
-                
-                $xmlwriter->end_tag($type->id);
-            }
-            $xmlwriter->end_tag('ingredient');
-
-            
-            // Finishing flavour index
-            $xmlwriter->end_tag('flavour');
-            $xmlwriter->stop();
-            $flavourxml = $xmloutput->get_allcontents();
-            
-            // Creating the .xml with the flavour info
-            $xmlfilepath = $flavourpath . '/flavour.xml';
-            if (!$xmlfh = fopen($xmlfilepath, 'w')) {
-                print_error('errorpackaging', 'local_flavours');
-            }
-            fwrite($xmlfh, $flavourxml);
-            fclose($xmlfh);
-            
-            // Flavour contents compression
-            $packer = new zip_packer();
-            $zipfilepath = $this->flavourstmpfolder . '/' . $hash . '/flavour_' . date('Y-m-d') . '.zip';
-            if (!$packer->archive_to_pathname(array('flavour' => $flavourpath), $zipfilepath)) {
-                print_error('errorpackaging', 'local_flavours');
-            }
-            
-            session_get_instance()->write_close();
-            send_file($zipfilepath, basename($zipfilepath));
-            
-            // TODO: Delete flavour $hash folder
+        if (!$selectedingredients) {
+            redirect($this->url, get_string('nothingselected', 'local_flavours'), 2);
         }
+            
+        // Flavour data
+        $form = new flavours_packaging_form($this->url);
+        if (!$data = $form->get_data()) {
+            print_error('errorpackaging', 'local_flavours');
+        }
+            
+        // Starting <xml>
+        // TODO: Replace for file_xml_output()
+        $xmloutput = new memory_xml_output();
+        $xmlwriter = new xml_writer($xmloutput);
+        $xmlwriter->start();
+        $xmlwriter->begin_tag('flavour');
+        $xmlwriter->full_tag('name', $data->name);
+        $xmlwriter->full_tag('description', $data->description);
+        $xmlwriter->full_tag('author', $data->author);
+        $xmlwriter->full_tag('timecreated', time());
+        $xmlwriter->full_tag('moodlerelease', $CFG->release);
+        $xmlwriter->full_tag('moodleversion', $CFG->version);
+            
+        // Random code to store the flavour data
+        $hash = sha1('flavour_'.$USER->id.'_'.time());
+        $flavourpath = $this->flavourstmpfolder.'/'.$hash;
+
+        if (file_exists($flavourpath) || !mkdir($flavourpath, $CFG->directorypermissions)) {
+            print_error('errorpackaging', 'local_flavours');
+        }
+
+        // Adding the selected ingredients data
+        $xmlwriter->begin_tag('ingredient');
+        foreach ($selectedingredients as $ingredienttype => $ingredientsdata) {
+                
+            // instance_ingredient_type gets a new flavours_ingredient_* object
+            $type = $this->instance_ingredient_type($ingredienttype);
+
+            $xmlwriter->begin_tag($type->id);
+                
+            // It executes the ingredient type specific actions to package
+            $type->package_ingredients($xmlwriter, $flavourpath, $ingredientsdata);
+                
+            $xmlwriter->end_tag($type->id);
+        }
+        $xmlwriter->end_tag('ingredient');
+
+            
+        // Finishing flavour index
+        $xmlwriter->end_tag('flavour');
+        $xmlwriter->stop();
+        $flavourxml = $xmloutput->get_allcontents();
+            
+        // Creating the .xml with the flavour info
+        $xmlfilepath = $flavourpath . '/flavour.xml';
+        if (!$xmlfh = fopen($xmlfilepath, 'w')) {
+            print_error('errorpackaging', 'local_flavours');
+        }
+        fwrite($xmlfh, $flavourxml);
+        fclose($xmlfh);
+            
+        // Flavour contents compression
+        $packer = new zip_packer();
+        $zipfilepath = $this->flavourstmpfolder . '/' . $hash . '/flavour_' . date('Y-m-d') . '.zip';
+        if (!$packer->archive_to_pathname(array('flavour' => $flavourpath), $zipfilepath)) {
+            print_error('errorpackaging', 'local_flavours');
+        }
+            
+        session_get_instance()->write_close();
+        send_file($zipfilepath, basename($zipfilepath));
+            
+        // TODO: Delete flavour $hash folder
         
         // To avoid the html headers and all the print* stuff
         die();

@@ -93,7 +93,7 @@ abstract class flavours {
         global $CFG;
         
         $classname = 'flavours_ingredient_'.$type;
-        $filepath = dirname(__FILE__) . '/ingredient/'.$classname.'.class.php';
+        $filepath = $CFG->dirroot . '/local/flavours/ingredient/'.$classname.'.class.php';
         if (!file_exists($filepath)) {
             print_error('ingredienttypenotavailable', 'local_flavours');
         }
@@ -166,6 +166,10 @@ abstract class flavours {
                 // treat his ingredients on a different way
                 $ingredients[$ingredienttype][$ingredientpath] = $ingredientpath;
             }
+        }
+        
+        if (empty($ingredients)) {
+            return false;
         }
         
         return $ingredients;

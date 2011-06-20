@@ -15,6 +15,7 @@ $string['flavourdata'] = 'Flavour data';
 $string['flavourdescription'] = 'Description';
 $string['flavourname'] = 'Name';
 $string['ingredienttypenotavailable'] = 'Ingredient type not available';
+$string['nothingselected'] = 'You must select something';
 $string['package'] = 'Package a flavour';
 $string['packageflavour'] = 'Package';
 $string['pluginname'] = 'Flavours';

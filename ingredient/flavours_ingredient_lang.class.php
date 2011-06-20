@@ -1,6 +1,6 @@
 <?php 
 
-require_once(dirname(__FILE__) . '/flavours_ingredient.class.php');
+require_once($CFG->dirroot . '/local/flavours/ingredient/flavours_ingredient.class.php');
 
 
 /**

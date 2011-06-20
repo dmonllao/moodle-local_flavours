@@ -31,8 +31,7 @@ M.local_flavours = {
         context.tree.setNodesProperty('propagateHighlightDown', true);
         context.tree.subscribe('clickEvent', context.tree.onEventToggleHighlight);
         context.tree.render();
-    
-    
+
         // Listener to create one node for each selected setting
         YAHOO.util.Event.on('id_ingredients_submit', 'click', function() {
     
@@ -46,7 +45,7 @@ M.local_flavours = {
     
             } else {
     
-                for (var i=0 ; i<hiLit.length ; i++) {
+                for (var i=0; i<hiLit.length; i++) {
     
                     treeNode = hiLit[i];
 

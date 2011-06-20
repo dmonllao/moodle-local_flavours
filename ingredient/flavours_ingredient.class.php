@@ -50,7 +50,7 @@ abstract class flavours_ingredient {
      * @param string $to
      * @return boolean Feedback
      */
-    protected function copy($from,$to) {
+    protected function copy($from, $to) {
         
         global $CFG;
 
@@ -66,7 +66,7 @@ abstract class flavours_ingredient {
         
         if (is_file($from)) {
             umask(0000);
-            if (!copy($from,$to)) {
+            if (!copy($from, $to)) {
                 $status = false;
             } else {
                 chmod($to, $CFG->directorypermissions);
@@ -87,7 +87,7 @@ abstract class flavours_ingredient {
                 if ($file=="." || $file==".." || !empty($scvsdirs[$file])) {
                     continue;
                 }
-                $status = $this->copy("$from/$file","$to/$file");
+                $status = $this->copy("$from/$file", "$to/$file");
             }
             closedir($dir);
         }

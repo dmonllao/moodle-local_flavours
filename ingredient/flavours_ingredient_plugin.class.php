@@ -107,7 +107,10 @@ class flavours_ingredient_plugin extends flavours_ingredient {
             // The plugin type folder
             $plugintypepath = $plugintypesdata[$plugintype];
             $plugintypebasepath = str_replace($CFG->dirroot, '', $plugintypepath);
-            $plugintypeflavourpath = str_replace(rtrim($CFG->dirroot, '/'), $path . '/' . $this->id, $plugintypepath);
+            $plugintypeflavourpath = str_replace(
+                rtrim($CFG->dirroot, '/'), 
+                $path . '/' . $this->id, 
+                $plugintypepath);
             
             if (!mkdir($plugintypeflavourpath, $CFG->directorypermissions, true)) {
                 debugging($plugintypeflavourpath);
@@ -129,12 +132,16 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                 
                 // Adding the ingredient to the flavour data
                 $xmlwriter->begin_tag($ingredient);
-                $xmlwriter->full_tag('name', $this->get_system_plugin_visiblename($plugintype, $ingredient));
-                $xmlwriter->full_tag('flavourpath', $this->id . '/' . $plugintype . '/' . $ingredient);
-                $xmlwriter->full_tag('moodlepath', ltrim($plugintypebasepath, '/') . '/' . $ingredient);
+                $xmlwriter->full_tag('name', 
+                    $this->get_system_plugin_visiblename($plugintype, $ingredient));
+                $xmlwriter->full_tag('flavourpath', 
+                    $this->id . '/' . $plugintype . '/' . $ingredient);
+                $xmlwriter->full_tag('moodlepath', 
+                    ltrim($plugintypebasepath, '/') . '/' . $ingredient);
                 
                 // The plugin version and required moodle version
-                $pluginversion = $this->get_system_plugin_version($plugintypepath . '/' . $ingredient);
+                $ingredientpath = $plugintypepath . '/' . $ingredient;
+                $pluginversion = $this->get_system_plugin_version($ingredientpath);
                 $xmlwriter->full_tag('version', $pluginversion->version);
                 $xmlwriter->full_tag('requires', $pluginversion->requires);
                 $xmlwriter->end_tag($ingredient);

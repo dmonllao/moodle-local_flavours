@@ -30,8 +30,7 @@ class flavours_packaging extends flavours {
         
         // And rendering on dom ready
         $PAGE->requires->js_init_call('M.local_flavours.render', null, true);
-        
-        
+
         // Fill the ingredients tree with this->ingredients (ondomready)
         $customdata['treedata'] = $this->get_tree_ingredients();
         
@@ -96,7 +95,6 @@ class flavours_packaging extends flavours {
         }
         $xmlwriter->end_tag('ingredient');
 
-            
         // Finishing flavour index
         $xmlwriter->end_tag('flavour');
         $xmlwriter->stop();
@@ -112,7 +110,8 @@ class flavours_packaging extends flavours {
             
         // Flavour contents compression
         $packer = new zip_packer();
-        $zipfilepath = $this->flavourstmpfolder . '/' . $hash . '/flavour_' . date('Y-m-d') . '.zip';
+        $zipfilepath = $this->flavourstmpfolder . 
+            '/' . $hash . '/flavour_' . date('Y-m-d') . '.zip';
         if (!$packer->archive_to_pathname(array('flavour' => $flavourpath), $zipfilepath)) {
             print_error('errorpackaging', 'local_flavours');
         }

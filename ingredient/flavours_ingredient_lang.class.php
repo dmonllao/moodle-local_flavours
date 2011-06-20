@@ -30,12 +30,12 @@ class flavours_ingredient_lang extends flavours_ingredient {
         
         $langs = get_string_manager()->get_list_of_translations();
         if ($langs) {
-	        foreach ($langs as $lang => $langname) {
-	            if ($lang != 'en') {
-		            $this->branches[$lang]->id = $lang;
-		            $this->branches[$lang]->name = $langname;
-	            }
-	        }
+            foreach ($langs as $lang => $langname) {
+                if ($lang != 'en') {
+                    $this->branches[$lang]->id = $lang;
+                    $this->branches[$lang]->name = $langname;
+                }
+            }
         }
     }
 
@@ -78,7 +78,7 @@ class flavours_ingredient_lang extends flavours_ingredient {
             $xmlwriter->full_tag('path', 'lang/' . $langid);
                 
             // Moodle doesn't have a language versioning system
-//            $xmlwriter->full_tag('version', ...);
+            // $xmlwriter->full_tag('version', ...);
             $xmlwriter->end_tag($langid);
         }
         

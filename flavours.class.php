@@ -7,7 +7,7 @@ abstract class flavours {
 
     protected $action;
     protected $url;
-    protected $flavourstmpfolder; 
+    protected $flavourstmpfolder;
     
     protected $output;
     protected $form;
@@ -70,7 +70,7 @@ abstract class flavours {
             // If it does not have children it's a leaf
             if (empty($data->branches)) {
                 $output .= '<li><a target="'.$branchprefix.'">'.$data->name.'</a></li>';
-                
+
             // Let's get the branch children
             } else {
                 $this->get_tree_data($output, $data, $branchprefix);
@@ -97,7 +97,7 @@ abstract class flavours {
         if (!file_exists($filepath)) {
             print_error('ingredienttypenotavailable', 'local_flavours');
         }
-            
+
         // Getting the system ingredients of that type 
         require_once($filepath);
         
@@ -161,7 +161,7 @@ abstract class flavours {
                 
                 // TODO: Ensure $namespace values are only a-zA-Z_
                 $ingredientpath = implode('/', $namespace);
-                
+
                 // Only organized by ingredient type, each type will  
                 // treat his ingredients on a different way
                 $ingredients[$ingredienttype][$ingredientpath] = $ingredientpath;

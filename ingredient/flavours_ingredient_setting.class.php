@@ -51,12 +51,12 @@ class flavours_ingredient_setting extends flavours_ingredient {
         // TODO: Monitor performance
         foreach ($ingredientsdata as $settingspage) {
             
-	        // Settings page path
-	        $namespace = explode('/', $settingspage);
-	            
-	        // The admin settingspage is the last one
-	        $page = array_pop($namespace);
-	            
+            // Settings page path
+            $namespace = explode('/', $settingspage);
+                
+            // The admin settingspage is the last one
+            $page = array_pop($namespace);
+                
             if (!$settings = $this->get_settingspage_settings($namespace, $page, $this)) {
                 continue;
             }
@@ -66,7 +66,8 @@ class flavours_ingredient_setting extends flavours_ingredient {
             
             // Adding settings
             foreach ($settings as $setting) {
-                $xmlwriter->full_tag($setting->name, $this->get_setting_value($setting->name, $setting->plugin));
+                $xmlwriter->full_tag($setting->name, 
+                    $this->get_setting_value($setting->name, $setting->plugin));
             }
             
             $xmlwriter->end_tag($settingspagetagname);
@@ -95,7 +96,8 @@ class flavours_ingredient_setting extends flavours_ingredient {
                     $branch->branches[$child->name]->name = $child->visiblename;
 
                     // Adding branch branches
-                    $this->get_branch_settings($child->children, $branch->branches[$child->name], $addsettings);
+                    $this->get_branch_settings($child->children, $branch->branches[$child->name], 
+                        $addsettings);
                 }
 
             // Adding the settings pages if we find settings
@@ -108,6 +110,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
                     foreach ($child->settings as $settingname => $setting) {
                         
                         // TODO: Take into account the _with_advanced....
+                        // TODO: Solve problem with plugins settings namespaces
                         if ($setting->plugin == '') {
                             $branch->branches[$child->name]->settings[$settingname]->plugin = 'core';
                         } else {

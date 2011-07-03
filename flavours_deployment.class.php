@@ -1,14 +1,14 @@
 <?php 
 
 require_once($CFG->dirroot . '/local/flavours/flavours.class.php');
+require_once($CFG->dirroot . '/local/flavours/forms/flavours_deployment_upload_form.php');
+require_once($CFG->dirroot . '/local/flavours/forms/flavours_deployment_form.php');
 
 class flavours_deployment extends flavours {
     
 
     public function deployment_upload() {
-        $this->output = 'I\'ll be a file picker and I\'ll redirect the user to ';
-        $this->output.= '<a href="'.$this->url.'?action=deployment_preview">'.
-            'the previsualization flavour page</a>';
+        $this->form = new flavours_deployment_upload_form($this->url);
     }
     
     public function deployment_preview() {

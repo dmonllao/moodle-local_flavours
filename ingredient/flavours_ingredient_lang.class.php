@@ -104,4 +104,25 @@ class flavours_ingredient_lang extends flavours_ingredient {
         }
     }
     
+    
+    /**
+     * Checks moodledata/lang permissions and which languages are present
+     * @return object The restrictions found (general level and specific ingredient level)
+     */
+    public function check_target_system() {
+        
+        $restrictions = array();
+        
+        // File permissions
+        if (!is_writtable($CFG->dataroot.'/lang/')) {
+            $restrictions->general['filepermissions'] = true;
+        }
+        
+        // Already installed?
+        foreach ($this->branches as $lang => $langdata) {
+            $restrictions->specific[$lang]['langalreadyinstalled'] = true;
+        }
+        
+        return $restrictions;
+    }
 }

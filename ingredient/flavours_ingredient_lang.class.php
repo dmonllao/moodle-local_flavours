@@ -85,4 +85,23 @@ class flavours_ingredient_lang extends flavours_ingredient {
         return true;
     }
     
+    
+    /**
+     * Gets the languages availables on the flavour
+     * @param SimpleXMLElement $xml
+     */
+    public function get_flavour_data($xml) {
+        
+        $langs = get_string_manager()->get_list_of_translations();
+        
+        foreach ($xml as $lang => $langdata) {
+            
+            // Is a valid lang?
+            if (!empty($langs[$lang])) {
+	            $this->branches[$lang]->id = $lang;
+	            $this->branches[$lang]->name = $langdata->name;
+            }
+        }
+    }
+    
 }

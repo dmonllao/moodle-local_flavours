@@ -27,7 +27,7 @@ class flavours_deployment_form extends moodleform {
             $this->_customdata["treedata"].'</div>');
     
         // Alerts
-        // TODO: Display the array filled in flavours_deployment
+        // TODO: Find a place to display the restrictions
         // TODO: Manage hide/show with JS 
 
         $mform->addElement('hidden', 'action', 'deployment_execute');

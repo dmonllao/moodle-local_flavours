@@ -26,6 +26,10 @@ abstract class flavours_ingredient {
     public $name;
     
     
+    /**
+     * The ingredient type ingredients
+     * @var array
+     */
     protected $branches;
     
     

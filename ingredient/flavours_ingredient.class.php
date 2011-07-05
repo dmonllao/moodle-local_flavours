@@ -26,6 +26,20 @@ abstract class flavours_ingredient {
     public $name;
     
     
+    protected $branches;
+    
+    
+    /**
+     * Contains the restriction found when deploying
+     * 
+     * Two attributes, general for ingredient-type common issues and 
+     * specific to specific ingredients
+     * 
+     * @var array
+     */
+    protected $restrictions = array();
+    
+    
     /**
      * Gets an ingredients list with the ingredients availables on the system
      * @abstract 
@@ -57,6 +71,10 @@ abstract class flavours_ingredient {
      * Checks if the target system accomplishes the flavour ingredients requirements
      * 
      * Disabled by default, but all the ingredient types should overwrite it
+     * 
+     * Loads $this->restrictions with ->general and ->specific attributes (array type both). The 
+     * array key will be used to get the language string
+     * 
      */
     public function check_target_system(){}
     

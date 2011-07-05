@@ -27,7 +27,8 @@ abstract class flavours_ingredient {
     
     
     /**
-     * Gets the an ingredients list with the ingredients availables on the system 
+     * Gets an ingredients list with the ingredients availables on the system
+     * @abstract 
      */
     abstract public function get_system_data();
 
@@ -35,12 +36,32 @@ abstract class flavours_ingredient {
     /**
      * Stores the selected ingredients into the flavour folder
      * 
+     * @abstract
      * @param xml_writer $xmlwriter The XML writer, by reference
      * @param array $ingredients The ingredients to store
      * @param string $path Where to store the flavour tmp files
      * @return boolean Not treated but true if it adds something
      */
     abstract public function package_ingredients(&$xmlwriter, $ingredients, $path);
+    
+    
+    /**
+     * Gets an ingredients list with the ingredients availables on a flavour
+     * @abstract
+     * @param SimpleXMLElement $xml
+     */
+    abstract public function get_flavour_data($xml);
+    
+    
+    /**
+     * Checks if the target system accomplishes the flavour ingredients requirements
+     * 
+     * Disabled by default, but all the ingredient types should overwrite it
+     */
+    public function check_target_system(){}
+    
+    
+//    abstract public function deploy_ingredients();
     
     
     /**

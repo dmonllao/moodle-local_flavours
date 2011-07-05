@@ -26,6 +26,7 @@ class flavours_deployment_upload_form extends moodleform {
         $mform->addElement('select', 'overwrite', $overwritelabel, $overwriteoptions);
         $mform->setType('overwrite', PARAM_ALPHA);
 
+        $mform->addElement('hidden', 'action', 'deployment_preview'); 
         $mform->addElement('submit', 'deployment_upload_submit', get_string('next'));
     }
 }

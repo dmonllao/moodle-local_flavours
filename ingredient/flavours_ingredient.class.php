@@ -39,6 +39,9 @@ abstract class flavours_ingredient {
      * Two attributes, general for ingredient-type common issues and 
      * specific to specific ingredients
      * 
+     * Format: $this->restrictions->general['restrictionfound'] = true;
+     *         $this->restrictions->specific['elementname']['restrictionfound'] = true;
+     * 
      * @var array
      */
     public $restrictions;

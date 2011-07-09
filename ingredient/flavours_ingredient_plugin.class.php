@@ -155,7 +155,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
     
 
     /**
-     * 
+     * Lists the flavour plugins
      * @param SimpleXMLElement $xml
      */
     public function get_flavour_info($xml) {
@@ -165,6 +165,8 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         foreach ($xml as $plugintype => $plugins) {
             
             foreach ($plugins as $pluginname => $plugindata) {
+                
+                // TODO: Check versioning and already added plugins (depending on overwrite value)
                 $this->branches[$plugintype]->id = $plugintype;
                 $this->branches[$plugintype]->name = $pluginman->plugintype_name_plural($plugintype);
                 $this->branches[$plugintype]->branches[$pluginname]->id = $pluginname;

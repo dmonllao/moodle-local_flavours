@@ -107,12 +107,12 @@ class flavours_ingredient_lang extends flavours_ingredient {
 	            $this->branches[$lang]->id = $lang;
 	            $this->branches[$lang]->name = $langdata->name;
             } else {
-                $this->restrictions->specifig[$lang]['langnotvalid'] = true;
+                $this->restrictions->specific[$lang]['notvalid'] = true;
             }
         }
         
     
-        // Already installed?
+        // TODO: Already installed?
 //        foreach ($this->branches as $lang => $langdata) {
 //            $this->restrictions->specific[$lang]['langalreadyinstalled'] = true;
 //        }

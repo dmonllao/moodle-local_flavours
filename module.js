@@ -38,6 +38,11 @@ M.local_flavours = {
             // We need the moodle form to add the checked settings
             var FlavoursForm = document.getElementById('mform1');
 
+            // TODO: Arghhhh! Look for other solutions! moodleform id can't be forced
+            if (!FlavoursForm) {
+            	FlavoursForm = document.getElementById('mform2');
+            }
+
             // Only the highlighted nodes
             var hiLit = context.tree.getNodesByProperty('highlightState', 1);
             if (YAHOO.lang.isNull(hiLit)) { 

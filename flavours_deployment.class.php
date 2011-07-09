@@ -38,7 +38,7 @@ class flavours_deployment extends flavours {
         $previousform = new flavours_deployment_upload_form($this->url);
         
         // Redirect in no data was submitted
-        if (!$prevformdata = $previousform->get_data()) {
+        if (!$formdata = $previousform->get_data()) {
             redirect($errorredirect, get_string('reselect', 'local_flavours'), 2);
         }
         
@@ -79,7 +79,7 @@ class flavours_deployment extends flavours {
         $toform->moodleversion = $xml->moodleversion;
         
         // Adding the over-write value from the upload flavour form and adding it as hidden
-        $toform->overwrite = $prevformdata->overwrite;
+        $toform->overwrite = $formdata->overwrite;
 
         // Fill $this->ingredients with the xml ingredients
         foreach ($xml->ingredient[0] as $type => $ingredientsxml) {
@@ -88,6 +88,9 @@ class flavours_deployment extends flavours {
             
             // It also looks for restrictions like file permissions, plugins already added
             $this->ingredients[$type]->get_flavour_info($ingredientsxml);
+            
+            // Gathering restrictions
+            $customdata['restrictions'][$type] = $this->ingredients[$type]->restrictions;
         }
 
         // Initializing the tree
@@ -110,7 +113,16 @@ class flavours_deployment extends flavours {
      * Flavours deployment results
      */
     public function deployment_execute() {
-        $this->output = 'That\'s all for now';
+        
+        $errorredirect = $this->url.'?action=deployment_upload';
+        
+        $form = new flavours_deployment_form($this->url);
+        if (!$formdata = $form->get_data()) {
+            redirect($errorredirect, get_string('reselect', 'local_flavours'), 2);
+        }
+        
+        notify(print_r($formdata));
+        notify(print_r($_POST));
     }
     
     

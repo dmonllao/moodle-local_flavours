@@ -26,7 +26,7 @@ class flavours_packaging extends flavours {
             
             // instnace_ingredient_type get a new flavours_ingredient_* object
             $this->ingredients[$type] = $this->instance_ingredient_type($type);
-            $this->ingredients[$type]->get_system_data();
+            $this->ingredients[$type]->get_system_info();
         }
 
         // Initializing the tree

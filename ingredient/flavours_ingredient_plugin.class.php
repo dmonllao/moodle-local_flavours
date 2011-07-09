@@ -166,6 +166,12 @@ class flavours_ingredient_plugin extends flavours_ingredient {
             
             foreach ($plugins as $pluginname => $plugindata) {
                 
+                // Writable directory?
+                $dir = $pluginman[$plugintype]->typerootdir;
+                if (!is_writable($dir)) {
+                    $this->restrictions->specific[$plugintype.'/'.$pluginname]['nowritable'] = true;
+                }
+                
                 // TODO: Check versioning and already added plugins (depending on overwrite value)
                 $this->branches[$plugintype]->id = $plugintype;
                 $this->branches[$plugintype]->name = $pluginman->plugintype_name_plural($plugintype);

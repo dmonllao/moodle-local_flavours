@@ -26,7 +26,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
     /**
      * Gets the list of plugin types and the system available ingredients
      */
-    public function get_system_data() {
+    public function get_system_info() {
         
         // Moodle plugin manager and plugin types
         $pluginman = plugin_manager::instance();
@@ -151,6 +151,27 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         }
 
         return true;
+    }
+    
+
+    /**
+     * 
+     * @param SimpleXMLElement $xml
+     */
+    public function get_flavour_info($xml) {
+        
+        $pluginman = plugin_manager::instance();
+        
+        foreach ($xml as $plugintype => $plugins) {
+            
+            foreach ($plugins as $pluginname => $plugindata) {
+                $this->branches[$plugintype]->id = $plugintype;
+                $this->branches[$plugintype]->name = $pluginman->plugintype_name_plural($plugintype);
+                $this->branches[$plugintype]->branches[$pluginname]->id = $pluginname;
+                $this->branches[$plugintype]->branches[$pluginname]->name = (String)$plugindata->name;
+            }
+            
+        }
     }
     
     

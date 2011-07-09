@@ -13,6 +13,10 @@ class flavours_packaging extends flavours {
     // TODO: Allow the ingredients types addition without code edition (opendir ingredient/ maybe)
     private $ingredienttypes = array('setting', 'plugin', 'lang');
     
+    
+    /**
+     * Outputs the packaging form
+     */
     public function packaging_form() {
         
         global $CFG, $PAGE;
@@ -41,6 +45,8 @@ class flavours_packaging extends flavours {
     
     /**
      * Packages the entire flavour and returns it
+     * @todo Add a checksum
+     * @todo Wrap tags data with CDATA
      */
     public function packaging_execute() {
         
@@ -120,6 +126,7 @@ class flavours_packaging extends flavours {
         send_file($zipfilepath, basename($zipfilepath));
             
         // TODO: Delete flavour $hash folder
+//        $this->clean_temp_folder()
         
         // To avoid the html headers and all the print* stuff
         die();

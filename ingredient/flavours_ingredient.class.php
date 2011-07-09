@@ -30,7 +30,7 @@ abstract class flavours_ingredient {
      * The ingredient type ingredients
      * @var array
      */
-    protected $branches;
+    public $branches;
     
     
     /**
@@ -41,14 +41,14 @@ abstract class flavours_ingredient {
      * 
      * @var array
      */
-    protected $restrictions = array();
+    public $restrictions;
     
     
     /**
      * Gets an ingredients list with the ingredients availables on the system
-     * @abstract 
+     * @abstract
      */
-    abstract public function get_system_data();
+    abstract public function get_system_info();
 
     
     /**
@@ -68,7 +68,7 @@ abstract class flavours_ingredient {
      * @abstract
      * @param SimpleXMLElement $xml
      */
-    abstract public function get_flavour_data($xml);
+    abstract public function get_flavour_info($xml);
     
     
     /**
@@ -76,8 +76,7 @@ abstract class flavours_ingredient {
      * 
      * Disabled by default, but all the ingredient types should overwrite it
      * 
-     * Loads $this->restrictions with ->general and ->specific attributes (array type both). The 
-     * array key will be used to get the language string
+     * 
      * 
      */
     public function check_target_system(){}

@@ -30,6 +30,7 @@ class flavours_deployment_form extends moodleform {
         // TODO: Find a place to display the restrictions
         // TODO: Manage hide/show with JS 
 
+        $mform->addElement('hidden', 'overwrite');
         $mform->addElement('hidden', 'action', 'deployment_execute');
         $mform->addElement('submit', 'ingredients_submit', 
             get_string('deployflavour', 'local_flavours'));

@@ -36,6 +36,10 @@ abstract class flavours {
         
         global $PAGE;
 
+        if (empty($this->ingredients)) {
+            return false;
+        }
+
         $treedata = '<ul>';
         foreach ($this->ingredients as $ingredienttype => $branch) {
 
@@ -62,19 +66,22 @@ abstract class flavours {
         $output .= $branch->name;
         
         $output .= '<ul>';
-        foreach ($branch->branches as $name => $data) {
-            
-            // To identify that branch/leaf and pass it through his branches
-            $branchprefix = $prefix.'/'.$data->id;
-            
-            // If it does not have children it's a leaf
-            if (empty($data->branches)) {
-                $output .= '<li><a target="'.$branchprefix.'">'.$data->name.'</a></li>';
+        if (!empty($branch->branches)) {
 
-            // Let's get the branch children
-            } else {
-                $this->get_tree_data($output, $data, $branchprefix);
-            } 
+	        foreach ($branch->branches as $name => $data) {
+
+	            // To identify that branch/leaf and pass it through his branches
+	            $branchprefix = $prefix.'/'.$data->id;
+
+	            // If it does not have children it's a leaf
+	            if (empty($data->branches)) {
+	                $output .= '<li><a target="'.$branchprefix.'">'.$data->name.'</a></li>';
+	
+	            // Let's get the branch children
+	            } else {
+	                $this->get_tree_data($output, $data, $branchprefix);
+	            } 
+	        }
         }
         
         $output .= '</ul>';
@@ -174,4 +181,16 @@ abstract class flavours {
         
         return $ingredients;
     }
+    
+    
+    /**
+     * Deletes the temp folder used to deploy the flavour
+     * 
+     * @param string $path The path to clean
+     * @return boolean
+     */
+    protected function clean_temp_folder($path) {
+        // TODO: All!
+    }
+    
 }

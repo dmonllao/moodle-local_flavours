@@ -26,7 +26,7 @@ class flavours_ingredient_lang extends flavours_ingredient {
     /**
      * Gets the installed languages
      */
-    public function get_system_data() {
+    public function get_system_info() {
         
         $langs = get_string_manager()->get_list_of_translations();
         if ($langs) {
@@ -88,11 +88,17 @@ class flavours_ingredient_lang extends flavours_ingredient {
     
     /**
      * Gets the languages availables on the flavour
+     * 
+     * It also loads $this->restrictions with ->general and ->specific attributes (array type both). 
+     * The array key will be used to get the language string
+     * 
      * @param SimpleXMLElement $xml
      */
-    public function get_flavour_data($xml) {
+    public function get_flavour_info($xml) {
+        global $CFG;
         
         $langs = get_string_manager()->get_list_of_translations();
+    
         
         foreach ($xml as $lang => $langdata) {
             
@@ -100,26 +106,21 @@ class flavours_ingredient_lang extends flavours_ingredient {
             if (!empty($langs[$lang])) {
 	            $this->branches[$lang]->id = $lang;
 	            $this->branches[$lang]->name = $langdata->name;
+            } else {
+                $this->restrictions->specifig[$lang]['langnotvalid'] = true;
             }
         }
-    }
+        
     
-    
-    /**
-     * Checks moodledata/lang permissions and which languages are present
-     */
-    public function check_target_system() {
+        // Already installed?
+//        foreach ($this->branches as $lang => $langdata) {
+//            $this->restrictions->specific[$lang]['langalreadyinstalled'] = true;
+//        }
         
         // File permissions
-        if (!is_writtable($CFG->dataroot.'/lang/')) {
+        if (!is_writable($CFG->dataroot.'/lang/')) {
             $this->restrictions->general['filepermissions'] = true;
         }
-        
-        // Already installed?
-        foreach ($this->branches as $lang => $langdata) {
-            $this->restrictions->specific[$lang]['langalreadyinstalled'] = true;
-        }
-        
     }
     
 }

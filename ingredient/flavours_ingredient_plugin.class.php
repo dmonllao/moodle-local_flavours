@@ -161,13 +161,14 @@ class flavours_ingredient_plugin extends flavours_ingredient {
     public function get_flavour_info($xml) {
         
         $pluginman = plugin_manager::instance();
+        $plugintypespaths = get_plugin_types();
         
         foreach ($xml as $plugintype => $plugins) {
             
             foreach ($plugins as $pluginname => $plugindata) {
                 
                 // Writable directory?
-                $dir = $pluginman[$plugintype]->typerootdir;
+                $dir = $plugintypespaths[$plugintype];
                 if (!is_writable($dir)) {
                     $this->restrictions->specific[$plugintype.'/'.$pluginname]['nowritable'] = true;
                 }

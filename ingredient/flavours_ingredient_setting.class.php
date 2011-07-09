@@ -26,7 +26,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
      * Gets the admin tree instance and populates $this->branch  
      * with the admin tree categories and pages
      */
-    public function get_system_data() { 
+    public function get_system_info() { 
         $adminroot = & admin_get_root();
         $this->get_branch_settings($adminroot->children, $this);
     }
@@ -76,6 +76,31 @@ class flavours_ingredient_setting extends flavours_ingredient {
         return true;
     }
         
+
+    /**
+     * Obtains the settings pages availables on the flavour
+     * 
+     * @todo Think of other ways to get the visiblename without so much trouble!
+     * @param SimpleXMLElement $xml
+     */
+    public function get_flavour_info($xml) {
+        
+        // Getting all the system settings to verify the available settings pages and to 
+        // get the real visiblename of the flavour settings pages and settings categories
+        $adminroot = & admin_get_root();
+        $this->get_branch_settings($adminroot->children, $systemsettings);
+        
+        foreach ($xml as $namespace => $settings) {
+            
+            // Converting from the xml settingspage namespace to the tree branches format
+            $treepath = explode('.', $namespace);
+            
+            // Recursive call to get all the settings pages
+            $this->get_flavour_branches($treepath, $this->branches, $systemsettings->branches);
+        }
+        
+    }
+
     
     /**
      * Iterates through the moodle admin tree to extract the settings categories & pages hierarchy
@@ -160,10 +185,35 @@ class flavours_ingredient_setting extends flavours_ingredient {
      * @return mixed
      */
     protected function get_setting_value($name, $plugin) {
-        
-        global $CFG;
-        
         return get_config($plugin, $name);
     }
-       
+
+    
+    /**
+     * Recursive method to fill the array with all the settings pages and with the common format
+     * 
+     * It checks if there is an available settingpage on the system for each flavour settingpage
+     * @param array $treepath An array containing the path to the settingpage
+     * @param array $branch Where to put the resulting data
+     * @param array $systemsettings To check the settingpage existence and to get the visiblename
+     */
+    protected function get_flavour_branches($treepath, &$branch, $systemsettings) {
+
+        $node = array_shift($treepath);
+        $branch[$node]->id = $node;
+
+        // Checking the existence of the settingpage on this moodle release
+        if (empty($systemsettings[$node])) {
+            $this->restrictions->specific[$node]['nosettingpage'] = true;
+        }
+        
+        $branch[$node]->name = $systemsettings[$node]->name;
+        
+        // Continue reaching the settings page
+        if (!empty($treepath)) {
+            $this->get_flavour_branches($treepath, $branch[$node]->branches, $systemsettings[$node]->branches);
+        }
+        
+    }
+    
 }

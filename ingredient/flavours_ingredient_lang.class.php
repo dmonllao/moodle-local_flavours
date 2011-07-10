@@ -99,28 +99,28 @@ class flavours_ingredient_lang extends flavours_ingredient {
         
         $langs = get_string_manager()->get_list_of_translations();
     
+        // File permissions
+        if (!is_writable($CFG->dataroot.'/lang/')) {
+            $nowritable = true;
+        }
         
         foreach ($xml as $lang => $langdata) {
+            
+            if (!empty($nowritable)) {
+                $this->branches[$lang]->restrictions['filepermissions'] = true;
+            }
             
             // Is a valid lang?
             if (!empty($langs[$lang])) {
 	            $this->branches[$lang]->id = $lang;
 	            $this->branches[$lang]->name = $langdata->name;
             } else {
-                $this->restrictions->specific[$lang]['notvalid'] = true;
+                $this->branches[$lang]->restrictions['notvalid'] = true;
             }
+            
+            // TODO: Check if the lang is already installed
         }
-        
-    
-        // TODO: Already installed?
-//        foreach ($this->branches as $lang => $langdata) {
-//            $this->restrictions->specific[$lang]['langalreadyinstalled'] = true;
-//        }
-        
-        // File permissions
-        if (!is_writable($CFG->dataroot.'/lang/')) {
-            $this->restrictions->general['filepermissions'] = true;
-        }
+
     }
     
 }

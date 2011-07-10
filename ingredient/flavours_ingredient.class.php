@@ -34,20 +34,6 @@ abstract class flavours_ingredient {
     
     
     /**
-     * Contains the restriction found when deploying
-     * 
-     * Two attributes, general for ingredient-type common issues and 
-     * specific to specific ingredients
-     * 
-     * Format: $this->restrictions->general['restrictionfound'] = true;
-     *         $this->restrictions->specific['elementname']['restrictionfound'] = true;
-     * 
-     * @var array
-     */
-    public $restrictions;
-    
-    
-    /**
      * Gets an ingredients list with the ingredients availables on the system
      * @abstract
      */

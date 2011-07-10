@@ -164,20 +164,26 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         $plugintypespaths = get_plugin_types();
         
         foreach ($xml as $plugintype => $plugins) {
+        
+            unset($nowritable);
             
-            foreach ($plugins as $pluginname => $plugindata) {
+            // Writable directory?
+            $dir = $plugintypespaths[$plugintype];
+            if (!is_writable($dir)) {
+                $nowritable = true;
+            }
                 
-                // Writable directory?
-                $dir = $plugintypespaths[$plugintype];
-                if (!is_writable($dir)) {
-                    $this->restrictions->specific[$plugintype.'/'.$pluginname]['nowritable'] = true;
-                }
+            foreach ($plugins as $pluginname => $plugindata) {
                 
                 // TODO: Check versioning and already added plugins (depending on overwrite value)
                 $this->branches[$plugintype]->id = $plugintype;
                 $this->branches[$plugintype]->name = $pluginman->plugintype_name_plural($plugintype);
                 $this->branches[$plugintype]->branches[$pluginname]->id = $pluginname;
                 $this->branches[$plugintype]->branches[$pluginname]->name = (String)$plugindata->name;
+                
+                if (!empty($nowritable)) {
+                    $this->branches[$plugintype]->branches[$pluginname]->restrictions['nowritable'] = true;
+                }
             }
             
         }

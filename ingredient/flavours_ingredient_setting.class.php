@@ -204,7 +204,12 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
         // Checking the existence of the settingpage on this moodle release
         if (empty($systemsettings[$node])) {
-            $this->restrictions->specific[$node]['nosettingpage'] = true;
+            
+            $branch[$node]->restrictions['nosettingpage'] = true;
+            
+            // Can't be shown if we leave the name empty
+            $branch[$node]->name = $node;
+            return false;
         }
         
         $branch[$node]->name = $systemsettings[$node]->name;

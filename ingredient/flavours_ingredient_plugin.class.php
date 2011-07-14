@@ -182,7 +182,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                 $this->branches[$plugintype]->branches[$pluginname]->name = (String)$plugindata->name;
                 
                 if (!empty($nowritable)) {
-                    $this->branches[$plugintype]->branches[$pluginname]->restrictions['nowritable'] = true;
+                    $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginnowritable'] = $dir;
                 }
             }
             

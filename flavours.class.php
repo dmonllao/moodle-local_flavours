@@ -75,7 +75,16 @@ abstract class flavours {
 
 	            // If it does not have children it's a leaf
 	            if (empty($data->branches)) {
-	                $output .= '<li><a target="'.$branchprefix.'">'.$data->name.'</a></li>';
+	                
+	                $string = $data->name;
+	                
+	                // Should we add restrictions info??
+	                if (!empty($data->restrictions)) {
+	                    $string .= ' <span class="error">';
+	                    $string .= $this->get_restrictions_string($data->restrictions);
+	                    $string .= '</span>';
+	                }
+	                $output .= '<li><a target="'.$branchprefix.'">'.$string.'</strong></a></li>';
 	
 	            // Let's get the branch children
 	            } else {
@@ -193,4 +202,17 @@ abstract class flavours {
         // TODO: All!
     }
     
+    
+    protected function get_restrictions_string($restrictions) {
+        
+        $strs = array();
+        if ($restrictions) {
+            foreach ($restrictions as $restriction => $a) {
+                $strs[] = get_string('restriction'.$restriction, 'local_flavours', $a);
+            }
+        }
+
+        
+        return implode(' / ', $strs);
+    }
 }

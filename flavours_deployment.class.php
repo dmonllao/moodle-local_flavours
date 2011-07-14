@@ -43,14 +43,14 @@ class flavours_deployment extends flavours {
         }
         
         // Creating the temp/ path
-        $uniquename = md5($USER->id.'_'.time().'_'.random_string(10));
-        $flavourpath = $CFG->dataroot.'/temp/'.$uniquename;
+        $uniquename = md5($USER->id . '_' . time() . '_' . random_string(10));
+        $flavourpath = $CFG->dataroot . '/temp/' . $uniquename;
         if (!mkdir($flavourpath, $CFG->directorypermissions)) {
             redirect($errorredirect, get_string('errordeployingpermissions', 'local_flavours'), 2);
         }
         
         // Saving the flavour file
-        $flavourfilename = $flavourpath.'/flavour.zip';
+        $flavourfilename = $flavourpath . '/flavour.zip';
         if (!$previousform->save_file('flavourfile', $flavourfilename, true)) {
             $this->clean_temp_folder($flavourpath);
             redirect($errorredirect, get_string('errordeployflavour', 'local_flavours'), 4);
@@ -63,13 +63,11 @@ class flavours_deployment extends flavours {
             redirect($errorredirect, get_string('errordeployflavour', 'local_flavours'), 4);
         }
         
-        // Getting the flavour xml which describes the flavour contents
-        $flavourxml = $this->get_flavour_xml($flavourzip);
+        // Getting the flavour xml which describes the flavour contents        
+        $xml = $this->get_flavour_xml($flavourzip);
+        
         $flavourzip->close();
         
-        // Parsing the .xml content to extract flavour info
-        $xml = simplexml_load_string($flavourxml);
-
         $toform = new stdClass();
         $toform->name = $xml->name[0];
         $toform->description = $xml->description;
@@ -98,11 +96,11 @@ class flavours_deployment extends flavours {
 
         // Fill the ingredients tree with this->ingredients (ondomready)
         $customdata['treedata'] = $this->get_tree_ingredients();
+        $customdata['flavourhash'] = $uniquename;
         
         $this->form = new flavours_deployment_form($this->url, $customdata);
         $this->form->set_data($toform);
         
-        // TODO: Delete the temp/ folder
     }
     
     
@@ -110,25 +108,64 @@ class flavours_deployment extends flavours {
      * Flavours deployment results
      */
     public function deployment_execute() {
+        global $CFG;
         
         $errorredirect = $this->url.'?action=deployment_upload';
-        
+
         $form = new flavours_deployment_form($this->url);
         if (!$formdata = $form->get_data()) {
+            $this->clean_temp_folder($path);
+            redirect($errorredirect, get_string('reselect', 'local_flavours'), 2);
+        }
+
+        // Getting the ingredients to deploy
+        if (!$flavouringredients = $this->get_ingredients_from_form()) {
+            $this->clean_temp_folder($path);
             redirect($errorredirect, get_string('reselect', 'local_flavours'), 2);
         }
         
-        notify(print_r($formdata));
-        notify(print_r($_POST));
+        // Flavour contents
+        $flavourpath = $CFG->dataroot . '/temp/' . $formdata->flavourhash;
+        $flavourfilename = $flavourpath . '/flavour.zip';
+        
+        $flavourzip = new ZipArchive();
+        if (!$flavourzip->open($flavourfilename, 0)) {
+            $this->clean_temp_folder($flavourpath);
+            redirect($errorredirect, get_string('errordeployflavour', 'local_flavours'), 4);
+        }
+        
+        // Getting the flavour xml which describes the flavour contents        
+        $xml = $this->get_flavour_xml($flavourzip);
+        
+        // Deploying ingredients when possible
+        foreach ($flavouringredients as $type => $ingredientstodeploy) {
+            
+            $this->ingredients[$type] = $this->instance_ingredient_type($type);
+            
+            // Deploying ingredients and storing the problems encountered to give feedback
+            $xmldata = $xml->ingredient[0]->$type; 
+            $problems[$type] = $this->ingredients[$type]->deploy_ingredients($ingredientstodeploy, 
+                $flavourzip, $xmldata);
+        }
+        
+        // TODO: Create a pretty results page and remove the loved print_r
+        print_r($problems);
+
+        $this->clean_temp_folder($path);
     }
     
     
     /**
-     * Gets the flavour main .xml with the flavour contents description
+     * Returns the flavour XML which describes the flavour contents
      * @param ZipArchive $flavourzip
-     * @return string
+     * @return SimpleXMLElement
      */
     protected function get_flavour_xml(ZipArchive $flavourzip) {
-        return $flavourzip->getFromName('flavour/flavour.xml');
+
+        $flavourxml = $flavourzip->getFromName('flavour/flavour.xml');
+        
+        // Parsing the .xml content to extract flavour info
+        return simplexml_load_string($flavourxml);
     }
+    
 }

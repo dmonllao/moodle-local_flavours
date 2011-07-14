@@ -27,10 +27,10 @@ class flavours_deployment_form extends moodleform {
             $this->_customdata["treedata"].'</div>');
     
         // Alerts
-        // TODO: Find a place to display the restrictions
-        // TODO: Manage hide/show with JS 
+        // TODO: Manage hide/show with JS and the checked boxes 
 
         $mform->addElement('hidden', 'overwrite');
+        $mform->addElement('hidden', 'flavourhash', $this->_customdata['flavourhash']);
         $mform->addElement('hidden', 'action', 'deployment_execute');
         $mform->addElement('submit', 'ingredients_submit', 
             get_string('deployflavour', 'local_flavours'));

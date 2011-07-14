@@ -61,17 +61,14 @@ abstract class flavours_ingredient {
     
     
     /**
-     * Checks if the target system accomplishes the flavour ingredients requirements
+     * From the flavour to the system
      * 
-     * Disabled by default, but all the ingredient types should overwrite it
-     * 
-     * 
-     * 
+     * @param array $ingredients What to deploy
+     * @param ZipArchive $flavourzip The flavour
+     * @param SimpleXMLElement $xml The XML of the ingredient type with the zip description
+     * @return array Problems encountered during the ingredients deployment
      */
-    public function check_target_system(){}
-    
-    
-//    abstract public function deploy_ingredients();
+    abstract public function deploy_ingredients($ingredients, ZipArchive $flavourzip, SimpleXMLElement $xml);
     
     
     /**

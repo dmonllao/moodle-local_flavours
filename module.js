@@ -22,16 +22,20 @@ M.local_flavours = {
     },
 
     
-    render: function(Y) {
+    render: function(Y, expandall) {
         
         var context = M.local_flavours;
 
-        //context.tree.expandAll();
         context.tree.setNodesProperty('propagateHighlightUp', true);
         context.tree.setNodesProperty('propagateHighlightDown', true);
         context.tree.subscribe('clickEvent', context.tree.onEventToggleHighlight);
         context.tree.render();
 
+        if (expandall) {
+            context.tree.expandAll();
+            context.tree.getRoot().highlight();
+        }
+        
         // Listener to create one node for each selected setting
         YAHOO.util.Event.on('id_ingredients_submit', 'click', function() {
     

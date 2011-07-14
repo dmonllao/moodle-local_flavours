@@ -88,16 +88,13 @@ class flavours_deployment extends flavours {
             
             // It also looks for restrictions like file permissions, plugins already added
             $this->ingredients[$type]->get_flavour_info($ingredientsxml);
-            
-            // Gathering restrictions
-            $customdata['restrictions'][$type] = $this->ingredients[$type]->restrictions;
         }
 
         // Initializing the tree
         $PAGE->requires->js_init_call('M.local_flavours.init', null, true);
         
         // And rendering on dom ready
-        $PAGE->requires->js_init_call('M.local_flavours.render', null, true);
+        $PAGE->requires->js_init_call('M.local_flavours.render', array('true'), true);
 
         // Fill the ingredients tree with this->ingredients (ondomready)
         $customdata['treedata'] = $this->get_tree_ingredients();

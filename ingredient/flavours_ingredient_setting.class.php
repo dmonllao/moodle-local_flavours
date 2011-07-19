@@ -103,6 +103,26 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
     
     /**
+     * Sets the settings values
+     * 
+     * @param array $ingredients
+     * @param string $path Path to the ingredient type file system
+     * @param SimpleXMLElement $xml
+     * @return array Problems during the ingredients deployment
+     */
+    public function deploy_ingredients($ingredients, $path, SimpleXMLElement $xml) {
+        
+        $problems = array();
+        
+        foreach ($ingredients as $ingredient) {
+            
+        }
+        
+        return $problems;
+    }
+    
+    
+    /**
      * Iterates through the moodle admin tree to extract the settings categories & pages hierarchy
      * 
      * @param object $admintreebranch

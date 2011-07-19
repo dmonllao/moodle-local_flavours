@@ -246,4 +246,25 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         
         return $returnvalue;
     }
+    
+    
+    /**
+     * Adds and upgrades the selected plugins
+     * 
+     * @param array $ingredients
+     * @param string $path Path to the ingredient type file system
+     * @param SimpleXMLElement $xml
+     * @return array Problems during the ingredients deployment
+     */
+    public function deploy_ingredients($ingredients, $path, SimpleXMLElement $xml) {
+        
+        $problems = array();
+        
+        foreach ($ingredients as $ingredient) {
+            
+        }
+        
+        return $problems;
+    }
+    
 }

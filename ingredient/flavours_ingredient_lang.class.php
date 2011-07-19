@@ -97,31 +97,76 @@ class flavours_ingredient_lang extends flavours_ingredient {
     public function get_flavour_info($xml) {
         global $CFG;
         
-        $langs = get_string_manager()->get_list_of_translations();
-    
+        $systemlangs = get_string_manager()->get_list_of_translations();
+        $alllangs = get_string_manager()->get_list_of_languages();
+        
         // File permissions
         $langsfolder = $CFG->dataroot.'/lang/';
         if (!is_writable($langsfolder)) {
             $nowritable = true;
         }
         
-        foreach ($xml as $lang => $langdata) {
-            
+        $ingredients = $xml->children();
+        foreach ($ingredients as $lang => $langdata) {
+
+            // Writable directory?
             if (!empty($nowritable)) {
                 $this->branches[$lang]->restrictions['langfilepermissions'] = $langsfolder;
             }
             
-            // Is a valid lang?
-            if (!empty($langs[$lang])) {
-	            $this->branches[$lang]->id = $lang;
-	            $this->branches[$lang]->name = $langdata->name;
-            } else {
+            // Installed language?
+            if (!empty($systemlangs[$lang])) {
+                $this->branches[$lang]->restrictions['langalreadyinstalled'] = $lang;
+            }
+              
+            // Valid language?
+            if (empty($alllangs[$lang])) {
                 $this->branches[$lang]->restrictions['langnotvalid'] = $lang;
+                
             }
             
-            // TODO: Check if the lang is already installed
+            $this->branches[$lang]->id = $lang;
+            $this->branches[$lang]->name = $langdata->name;
         }
 
+    }
+    
+    
+    /**
+     * Installs the selected languages
+     * 
+     * @todo Language md5 verification?
+     * @param array $ingredients
+     * @param string $path Path to the ingredient type file system
+     * @param SimpleXMLElement $xml
+     * @return array Problems during the ingredients deployment
+     */
+    public function deploy_ingredients($ingredients, $path, SimpleXMLElement $xml) {
+        global $CFG;
+        
+        // Checking again and storing data in $this->branches
+        $this->get_flavour_info($xml);
+
+        $problems = array();
+        foreach ($ingredients as $ingredient) {
+
+            // Only if there are no problems with the ingredient
+            if (!empty($this->branches[$ingredient]->restrictions)) {
+                $problems[$ingredient] = $this->branches[$ingredient]->restrictions;
+                continue;
+            }
+            
+            // TODO: Deep revision of lang_installer()
+            $langpath = $CFG->dataroot . '/lang/' . $ingredient;
+            mkdir($langpath, $CFG->directorypermissions);
+            
+            $tmplangpath = $path . '/' . $ingredient;
+            $this->copy($tmplangpath, $langpath);
+
+            // TODO: Something is missing...
+        }
+        
+        return $problems;
     }
     
 }

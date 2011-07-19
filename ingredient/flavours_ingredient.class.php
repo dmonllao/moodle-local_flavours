@@ -63,12 +63,13 @@ abstract class flavours_ingredient {
     /**
      * From the flavour to the system
      * 
+     * @abstract
      * @param array $ingredients What to deploy
-     * @param ZipArchive $flavourzip The flavour
+     * @param string $path Path to the ingredient type file system
      * @param SimpleXMLElement $xml The XML of the ingredient type with the zip description
      * @return array Problems encountered during the ingredients deployment
      */
-    abstract public function deploy_ingredients($ingredients, ZipArchive $flavourzip, SimpleXMLElement $xml);
+    abstract public function deploy_ingredients($ingredients, $path, SimpleXMLElement $xml);
     
     
     /**

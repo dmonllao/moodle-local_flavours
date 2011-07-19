@@ -128,6 +128,11 @@ class flavours_deployment extends flavours {
         $flavourpath = $CFG->dataroot . '/temp/' . $formdata->flavourhash;
         $flavourfilename = $flavourpath . '/flavour.zip';
         
+        // Getting zip contents
+        if (!unzip_file($flavourfilename, $flavourpath, false)) {
+            print_error('errorcantunzip', 'local_flavours');
+        }
+        
         $flavourzip = new ZipArchive();
         if (!$flavourzip->open($flavourfilename, 0)) {
             $this->clean_temp_folder($flavourpath);
@@ -142,16 +147,25 @@ class flavours_deployment extends flavours {
             
             $this->ingredients[$type] = $this->instance_ingredient_type($type);
             
+            // Ingredient type filesystem
+            $ingredienttypepath = $flavourpath . '/flavour/' . $type;
+            if (!file_exists($ingredienttypepath)) {
+                $ingredienttypepath = false;
+            }
+            
             // Deploying ingredients and storing the problems encountered to give feedback
             $xmldata = $xml->ingredient[0]->$type; 
             $problems[$type] = $this->ingredients[$type]->deploy_ingredients($ingredientstodeploy, 
-                $flavourzip, $xmldata);
+                $ingredienttypepath, $xmldata);
         }
         
         // TODO: Create a pretty results page and remove the loved print_r
         print_r($problems);
 
-        $this->clean_temp_folder($path);
+        $this->clean_temp_folder($flavourpath);
+        
+        // TODO: Add a button/link to 'Notifications' to install/upgrade plugins
+        // TODO: Add a button/link to 'Update the deployed language packs
     }
     
     

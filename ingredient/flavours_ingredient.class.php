@@ -124,4 +124,15 @@ abstract class flavours_ingredient {
         return $status;
     }
 
+    
+    /**
+     * Recursive implementation of unlink() to remove directories
+     * @todo
+     * @param string $path
+     * @return boolean Success?
+     */
+    protected function unlink($path) {
+    	return false;
+    }
+    
 }

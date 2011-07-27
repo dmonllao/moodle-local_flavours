@@ -222,6 +222,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
      */
     public function deploy_ingredients($ingredients, $path, SimpleXMLElement $xml) {
 
+    	// Using the $ingredients array keys to maintain coherence with the main deployment method 
         $problems = array();
         
         $pluginman = plugin_manager::instance();
@@ -237,19 +238,19 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         	$ingredient = $ingredientdata[1];
         	
         	if (empty($this->branches[$type]->branches[$ingredient])) {
-        		$problems[$ingredient]['pluginnotfound'] = $selection;
+        		$problems[$selection]['pluginnotfound'] = $selection;
         		continue;
         	}
         	$ingredientdata = $this->branches[$type]->branches[$ingredient];
 
             // Adapter to the restrictions array
             if (!empty($ingredientdata->restrictions)) {
-                $problems[$ingredient] = $ingredientdata->restrictions;
+                $problems[$selection] = $ingredientdata->restrictions;
                 continue;
             }
 
         	if (empty($xml->{$type}) || empty($xml->{$type}->{$ingredient})) {
-        		$problems[$ingredient]['pluginnotfound'] = $selection;
+        		$problems[$selection]['pluginnotfound'] = $selection;
         		continue;
         	}
 
@@ -263,7 +264,9 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         	
         	// Copy the new contents where the flavour says
         	$tmppath = $path . '/' . $xml->{$type}->{$ingredient}->flavourpath;
-        	$this->copy($tmppath, $ingredientpath);
+        	if (!$this->copy($tmppath, $ingredientpath)) {
+        		$problems[$selection]['plugincopyerror'] = $selection;
+        	}
         }
         
         return $problems;

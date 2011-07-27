@@ -108,7 +108,9 @@ class flavours_deployment extends flavours {
      * Flavours deployment results
      */
     public function deployment_execute() {
-        global $CFG;
+        global $CFG, $OUTPUT;
+        
+        $outputs = array();        // Deployment results
         
         $errorredirect = $this->url.'?action=deployment_upload';
 
@@ -155,13 +157,45 @@ class flavours_deployment extends flavours {
             
             // Deploying ingredients and storing the problems encountered to give feedback
             $xmldata = $xml->ingredient[0]->$type; 
-            $problems[$type] = $this->ingredients[$type]->deploy_ingredients($ingredientstodeploy, 
+            $outputs[$type] = $this->ingredients[$type]->deploy_ingredients($ingredientstodeploy, 
                 $ingredienttypepath, $xmldata);
+                
+            // Prepare to display deployment results
+            foreach ($ingredientstodeploy as $ingredientname => $ingredientdata) {
+            	if (empty($outputs[$type][$ingredientname])) {
+            		$outputs[$type][$ingredientname] = true;
+            	}
+            }
         }
         
-        // TODO: Create a pretty results page and remove the loved print_r
-        print_r($problems);
+        // Output results
+        $table = new html_table();
+        $table->attributes['class'] = 'generaltable boxaligncenter';
+        $table->align = array('left', 'left', 'center');
+        $table->head  = array(get_string('ingredienttype', 'local_flavours'),
+            get_string('ingredient', 'local_flavours'),
+            get_string('deploymentresult', 'local_flavours'));
 
+        // Fill the table
+        foreach ($outputs as $type => $ingredients) {
+        	foreach ($ingredients as $ingredientname => $outputs) {
+        		
+        		// Success
+        		if (is_bool($outputs)) {
+        			$feedback = get_string('success');
+        			$classname = 'flavours_deployment_success';
+        		} else {
+        			$feedback = $this->get_restrictions_string($outputs);
+        			$classname = 'error';
+        		}
+        		
+        		$feedback = '<span class="'.$classname.'">'.$feedback.'</span>';
+        		$table->data[] = array($this->ingredients[$type]->name, $ingredientname, $feedback);
+        	}
+        }
+        $this->output = html_writer::table($table);
+        
+        // Finishing
         $this->clean_temp_folder($flavourpath);
         
         // TODO: Add a button/link to 'Notifications' to install/upgrade plugins

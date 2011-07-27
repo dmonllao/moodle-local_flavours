@@ -134,8 +134,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                 $xmlwriter->begin_tag($ingredient);
                 $xmlwriter->full_tag('name', 
                     $this->get_system_plugin_visiblename($plugintype, $ingredient));
-                $xmlwriter->full_tag('flavourpath', 
-                    $this->id . '/' . $plugintype . '/' . $ingredient);
+                $xmlwriter->full_tag('flavourpath', $plugintype . '/' . $ingredient);
                 $xmlwriter->full_tag('moodlepath', 
                     ltrim($plugintypebasepath, '/') . '/' . $ingredient);
                 
@@ -160,10 +159,14 @@ class flavours_ingredient_plugin extends flavours_ingredient {
      */
     public function get_flavour_info($xml) {
         
+    	$overwrite = required_param('overwrite', PARAM_INT);
+    	
         $pluginman = plugin_manager::instance();
+        $systemplugins = $pluginman->get_plugins();
         $plugintypespaths = get_plugin_types();
         
-        foreach ($xml as $plugintype => $plugins) {
+        $ingredients = $xml->children();
+        foreach ($ingredients as $plugintype => $plugins) {
         
             unset($nowritable);
             
@@ -175,7 +178,26 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                 
             foreach ($plugins as $pluginname => $plugindata) {
                 
-                // TODO: Check versioning and already added plugins (depending on overwrite value)
+            	// Only to display on notifications
+            	$pluginfull = $plugintype . '/' . $pluginname;
+            	
+            	// Versioning checkings
+            	if (!empty($systemplugins[$plugintype][$pluginname])) {
+            	
+            		$systemplugin = $systemplugins[$plugintype][$pluginname];
+            		
+	                // Overwrite disabled
+	                if (!empty($systemplugin) && !$overwrite) {
+	                	$this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginalreadyinstalled'] = $pluginfull;
+	                }
+	                
+	                // Overwrite if newer release on flavour
+	                // TODO: versiondisk or versiondb???
+	                if (!empty($systemplugin) && $plugindata->version <= $systemplugin->versiondisk) {
+	                	$this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginflavournotnewer'] = $pluginfull;
+	                }
+            	}
+                
                 $this->branches[$plugintype]->id = $plugintype;
                 $this->branches[$plugintype]->name = $pluginman->plugintype_name_plural($plugintype);
                 $this->branches[$plugintype]->branches[$pluginname]->id = $pluginname;
@@ -187,6 +209,64 @@ class flavours_ingredient_plugin extends flavours_ingredient {
             }
             
         }
+    }
+    
+
+    /**
+     * Adds and upgrades the selected plugins
+     * 
+     * @param array $ingredients
+     * @param string $path Path to the ingredient type file system
+     * @param SimpleXMLElement $xml
+     * @return array Problems during the ingredients deployment
+     */
+    public function deploy_ingredients($ingredients, $path, SimpleXMLElement $xml) {
+
+        $problems = array();
+        
+        $pluginman = plugin_manager::instance();
+        $plugintypespaths = get_plugin_types();
+        
+        $this->get_flavour_info($xml);
+
+        foreach ($ingredients as $selection) {
+            
+        	// [0] => ingredienttype, [1] => ingredientname
+        	$ingredientdata = explode('/', $selection);
+        	$type = $ingredientdata[0];
+        	$ingredient = $ingredientdata[1];
+        	
+        	if (empty($this->branches[$type]->branches[$ingredient])) {
+        		$problems[$ingredient]['pluginnotfound'] = $selection;
+        		continue;
+        	}
+        	$ingredientdata = $this->branches[$type]->branches[$ingredient];
+
+            // Adapter to the restrictions array
+            if (!empty($ingredientdata->restrictions)) {
+                $problems[$ingredient] = $ingredientdata->restrictions;
+                continue;
+            }
+
+        	if (empty($xml->{$type}) || empty($xml->{$type}->{$ingredient})) {
+        		$problems[$ingredient]['pluginnotfound'] = $selection;
+        		continue;
+        	}
+
+        	// Deploy then
+        	$ingredientpath = $plugintypespaths[$type] . '/' . $ingredient;
+        	
+        	// Remove old dir if present
+        	if (file_exists($ingredientpath)) {
+        		$this->unlink($ingredientpath);
+        	}
+        	
+        	// Copy the new contents where the flavour says
+        	$tmppath = $path . '/' . $xml->{$type}->{$ingredient}->flavourpath;
+        	$this->copy($tmppath, $ingredientpath);
+        }
+        
+        return $problems;
     }
     
     
@@ -245,26 +325,6 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         }
         
         return $returnvalue;
-    }
-    
-    
-    /**
-     * Adds and upgrades the selected plugins
-     * 
-     * @param array $ingredients
-     * @param string $path Path to the ingredient type file system
-     * @param SimpleXMLElement $xml
-     * @return array Problems during the ingredients deployment
-     */
-    public function deploy_ingredients($ingredients, $path, SimpleXMLElement $xml) {
-        
-        $problems = array();
-        
-        foreach ($ingredients as $ingredient) {
-            
-        }
-        
-        return $problems;
     }
     
 }

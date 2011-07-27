@@ -67,7 +67,8 @@ class flavours_ingredient_setting extends flavours_ingredient {
             // Adding settings
             foreach ($settings as $setting) {
                 $xmlwriter->full_tag($setting->name, 
-                    $this->get_setting_value($setting->name, $setting->plugin));
+                    $this->get_setting_value($setting->name, $setting->plugin),
+                    array('plugin' => $setting->plugin));
             }
             
             $xmlwriter->end_tag($settingspagetagname);
@@ -111,13 +112,39 @@ class flavours_ingredient_setting extends flavours_ingredient {
      * @return array Problems during the ingredients deployment
      */
     public function deploy_ingredients($ingredients, $path, SimpleXMLElement $xml) {
-        
-        $problems = array();
+
+    	$problems = array();
+    	
+        $xmlingredients = $xml->children();
         
         foreach ($ingredients as $ingredient) {
             
+        	$xmlingredient = str_replace('/', '.', $ingredient);
+        	
+        	if (empty($xmlingredients->$xmlingredient)) {
+        		$problems[$ingredient]['settingnosettingpage'] = $xmlingredient;
+        		continue;
+        	}
+        	
+        	// Getting settings and overwritting
+        	$pagesettings = $xmlingredients->$xmlingredient->children();
+
+        	// TODO: Take into account the settings of existing plugins to avoid overwrite
+        	foreach ($pagesettings as $settingname => $settingdata) {
+        		
+        		// TODO: Maybe a $problem?
+        		if (!$plugin = $settingdata->attributes()->plugin) {
+        			continue;
+        		}
+        		
+        		if ($plugin == 'core') {
+        			$plugin = null;
+        		}
+        		
+        		set_config($settingname, $settingdata[0], $plugin);
+        	}
         }
-        
+
         return $problems;
     }
     

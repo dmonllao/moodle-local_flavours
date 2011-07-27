@@ -105,7 +105,11 @@ class flavours_deployment extends flavours {
     
     
     /**
-     * Flavours deployment results
+     * Flavours deployment
+     * 
+     * Executes the deployment delegating to the specific ingredient types managers, it 
+     * opens the flavour compressed file to extract the data and cleans the flavour temp
+     * directory when finishes
      */
     public function deployment_execute() {
         global $CFG, $OUTPUT;

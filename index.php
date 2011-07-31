@@ -10,7 +10,9 @@ $action = optional_param('action', 'packaging_form', PARAM_ALPHAEXT);
 // Access control
 require_login();
 require_capability('moodle/site:config', get_context_instance(CONTEXT_SYSTEM));
-// TODO: Add sesskey checking
+if (!confirm_sesskey()) {
+    print_error('confirmsesskeybad', 'error');
+}
 
 $context = get_context_instance(CONTEXT_SYSTEM);
 

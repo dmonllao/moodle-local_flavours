@@ -34,7 +34,7 @@ class flavours_deployment extends flavours {
     public function deployment_preview() {
         global $USER, $CFG, $PAGE;
         
-        $errorredirect = $this->url.'?action=deployment_upload';
+        $errorredirect = $this->url . '?action=deployment_upload&sesskey=' . sesskey();
         $previousform = new flavours_deployment_upload_form($this->url);
         
         // Redirect in no data was submitted
@@ -116,23 +116,23 @@ class flavours_deployment extends flavours {
         
         $outputs = array();        // Deployment results
         
-        $errorredirect = $this->url.'?action=deployment_upload';
+        $errorredirect = $this->url . '?action=deployment_upload&sesskey=' . sesskey();
 
         $form = new flavours_deployment_form($this->url);
         if (!$formdata = $form->get_data()) {
-            $this->clean_temp_folder($path);
+            $this->clean_temp_folder($flavourpath);
             redirect($errorredirect, get_string('reselect', 'local_flavours'), 2);
         }
 
-        // Getting the ingredients to deploy
-        if (!$flavouringredients = $this->get_ingredients_from_form()) {
-            $this->clean_temp_folder($path);
-            redirect($errorredirect, get_string('reselect', 'local_flavours'), 2);
-        }
-        
         // Flavour contents
         $flavourpath = $CFG->dataroot . '/temp/' . $formdata->flavourhash;
         $flavourfilename = $flavourpath . '/flavour.zip';
+        
+        // Getting the ingredients to deploy
+        if (!$flavouringredients = $this->get_ingredients_from_form()) {
+            $this->clean_temp_folder($flavourpath);
+            redirect($errorredirect, get_string('reselect', 'local_flavours'), 2);
+        }
         
         // Getting zip contents
         if (!unzip_file($flavourfilename, $flavourpath, false)) {
@@ -193,7 +193,7 @@ class flavours_deployment extends flavours {
         			$classname = 'error';
         		}
         		
-        		$feedback = '<span class="'.$classname.'">'.$feedback.'</span>';
+        		$feedback = '<span class="' . $classname . '">' . $feedback . '</span>';
         		$table->data[] = array($this->ingredients[$type]->name, $ingredientname, $feedback);
         	}
         }

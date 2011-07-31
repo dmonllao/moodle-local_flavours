@@ -52,10 +52,12 @@ class flavours_packaging extends flavours {
         
         global $USER, $CFG;
         
+        $errorredirect = $this->url . '?sesskey=' . sesskey();
+        
         // Getting selected data
         $selectedingredients = $this->get_ingredients_from_form();
         if (!$selectedingredients) {
-            redirect($this->url, get_string('nothingselected', 'local_flavours'), 2);
+            redirect($errorredirect, get_string('nothingselected', 'local_flavours'), 2);
         }
 
         // Flavour data

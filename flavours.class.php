@@ -200,6 +200,10 @@ abstract class flavours {
      */
     protected function clean_temp_folder($path) {
         // TODO: All!
+        
+    	if ($path == false || $path == '') {
+    		return false;
+    	}
     }
     
     

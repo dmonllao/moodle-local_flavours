@@ -10,10 +10,6 @@ require_once($CFG->dirroot . '/local/flavours/forms/flavours_packaging_form.php'
 
 class flavours_packaging extends flavours {
     
-    // TODO: Allow the ingredients types addition without code edition (opendir ingredient/ maybe)
-    private $ingredienttypes = array('setting', 'plugin', 'lang');
-    
-    
     /**
      * Outputs the packaging form
      */
@@ -127,8 +123,8 @@ class flavours_packaging extends flavours {
         session_get_instance()->write_close();
         send_file($zipfilepath, basename($zipfilepath));
             
-        // TODO: Delete flavour $hash folder
-//        $this->clean_temp_folder()
+        // Delete flavour $hash folder
+        $this->clean_temp_folder();
         
         // To avoid the html headers and all the print* stuff
         die();

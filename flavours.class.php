@@ -8,6 +8,7 @@ abstract class flavours {
     protected $action;
     protected $url;
     protected $flavourstmpfolder;
+    protected $ingredienttypes;
     
     protected $output;
     protected $form;
@@ -24,9 +25,12 @@ abstract class flavours {
         if (!file_exists($this->flavourstmpfolder)) {
             mkdir($this->flavourstmpfolder, $CFG->directorypermissions);
         }
+        
+        // Getting the system ingredient types
+        $this->set_ingredient_types();
     }
     
-
+    
     /**
      * Creates the tree structure based on $this->ingredients
      * 
@@ -189,6 +193,32 @@ abstract class flavours {
         }
         
         return $ingredients;
+    }
+    
+
+    /**
+     * Sets the available ingredient types of the system
+     * 
+     * Reads the flavours/ingredient/ folder to extract the ingredient names
+     * from the available classes, excluding the parent class
+     */
+    protected function set_ingredient_types() {
+    	global $CFG;
+
+    	$this->ingredienttypes = array();
+    	 
+    	$ingredientsdir = $CFG->dirroot . '/local/flavours/ingredient/';
+    	if ($dirhandler = opendir($ingredientsdir)) {
+    		while (($file = readdir($dirhandler)) !== false) {
+    			
+    			// Excluding the parent class (and maybe SCV hidden files or something like that)
+    			preg_match('/flavours_ingredient_(.*?).class.php/', $file, $ingredienttype);
+    			if ($ingredienttype) {
+    				$this->ingredienttypes[] = $ingredienttype[1];
+    			}
+    		}
+    		closedir($dirhandler);
+    	}
     }
     
     

@@ -193,8 +193,10 @@ class flavours_ingredient_plugin extends flavours_ingredient {
 	                
 	                // Overwrite if newer release on flavour
 	                // TODO: versiondisk or versiondb???
-	                if (!empty($systemplugin) && $plugindata->version <= $systemplugin->versiondisk) {
-	                	$this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginflavournotnewer'] = $pluginfull;
+	                // TODO: Take into account plugins without ->version
+	                // TODO: Check the ->requires
+	                if (!empty($systemplugin) && $overwrite && $plugindata->version <= $systemplugin->versiondisk) {
+	                    $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginflavournotnewer'] = $pluginfull;
 	                }
             	}
                 

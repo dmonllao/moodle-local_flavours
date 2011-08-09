@@ -156,14 +156,11 @@ class flavours_ingredient_lang extends flavours_ingredient {
                 continue;
             }
             
-            // TODO: Deep revision of lang_installer()
             $langpath = $CFG->dataroot . '/lang/' . $ingredient;
             mkdir($langpath, $CFG->directorypermissions);
             
             $tmplangpath = $path . '/' . $ingredient;
             $this->copy($tmplangpath, $langpath);
-
-            // TODO: Something is missing...
         }
         
         return $problems;

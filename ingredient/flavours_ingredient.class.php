@@ -110,10 +110,10 @@ abstract class flavours_ingredient {
             }
             
             $dir = opendir($from);
-            while (false !== ($file=readdir($dir))) {
+            while (false !== ($file = readdir($dir))) {
                 
                 // We don't want SCVS files
-                if ($file=="." || $file==".." || !empty($scvsdirs[$file])) {
+                if ($file == "." || $file == ".." || !empty($scvsdirs[$file])) {
                     continue;
                 }
                 $status = $this->copy("$from/$file", "$to/$file");
@@ -123,16 +123,24 @@ abstract class flavours_ingredient {
         
         return $status;
     }
-
+    
     
     /**
-     * Recursive implementation of unlink() to remove directories
-     * @todo
-     * @param string $path
-     * @return boolean Success?
+     * Support function - Adapter to flavours->unlink
+     * 
+     * @param string $path The path to delete
+     * @return boolean
      */
     protected function unlink($path) {
-    	return false;
+
+    	// All that dirty code to maintain 'flavours' as an abstract class
+    	// As a reminder, PHP > 5.2.? does not allow static methods of abstract classes
+    	$action = optional_param('action', 'packaging_form', PARAM_ALPHAEXT);
+    	$tmparray = explode('_', $action);
+    	$classname = 'flavours_' . $tmparray[0];
+    	$instance = new $classname($action);
+    	
+    	return $instance->unlink($path);
     }
     
 }

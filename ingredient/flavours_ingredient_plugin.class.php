@@ -261,7 +261,12 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         	
         	// Remove old dir if present
         	if (file_exists($ingredientpath)) {
-        		$this->unlink($ingredientpath);
+        		
+        		// Report if the old plugin directory can't be removed
+        		if (!$this->unlink($ingredientpath)) {
+        			$problems[$selection]['plugincantremove'] = $selection;
+        			continue;
+        		}
         	}
         	
         	// Copy the new contents where the flavour says

@@ -223,20 +223,46 @@ abstract class flavours {
     
     
     /**
-     * Deletes the temp folder used to deploy the flavour
-     * 
-     * @param string $path The path to clean
+     * Recursive implementation of unlink() to remove directories
+     *
+     * @param string $path The path to remove
      * @return boolean
      */
-    protected function clean_temp_folder($path) {
-        // TODO: All!
+    public function unlink($path) {
+    
+        if ($path == false || $path == '') {
+            return false;
+        }
         
-    	if ($path == false || $path == '') {
-    		return false;
-    	}
+        $status = true;
+        
+        if (!is_dir($path)) {
+        	$status = @unlink($path);
+
+        } else {
+        	$dir = opendir($path);
+            while (false !== ($file = readdir($dir))) {
+                if ($file == "." || $file == "..") {
+                    continue;
+                }
+
+                $status = $status && $this->unlink($path . '/' . $file);
+            }
+            closedir($dir);
+
+            $status = $status && @rmdir($path);
+        }
+        
+        return $status;
     }
     
-    
+
+    /**
+     * The restrictions in a string
+     * 
+     * @param array $restrictions
+     * @return string
+     */
     protected function get_restrictions_string($restrictions) {
         
         $strs = array();

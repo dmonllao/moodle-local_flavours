@@ -41,6 +41,7 @@ $string['restrictionlangalreadyinstalled'] = 'Language "{$a}" already installed'
 $string['restrictionlangfilepermissions'] = 'Wrong permissions to install new language packs';
 $string['restrictionlangnotvalid'] = 'Language pack "{$a}" not valid';
 $string['restrictionpluginalreadyinstalled'] = 'Plugin "{$a}" already installed';
+$string['restrictionplugincantremove'] = 'The "{$a}" plugin current version can\'t be upgraded, check the folder permissions';
 $string['restrictionplugincopyerror'] = 'Error copying';
 $string['restrictionpluginflavournotnewer'] = 'The flavour version not newer than the installed version';
 $string['restrictionpluginnowritable'] = 'Wrong permissions to install or upgrade on "{$a}"';

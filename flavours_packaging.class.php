@@ -119,12 +119,14 @@ class flavours_packaging extends flavours {
         if (!$packer->archive_to_pathname(array('flavour' => $flavourpath), $zipfilepath)) {
             print_error('errorpackaging', 'local_flavours');
         }
+        
+        // Delete flavour $hash folder
+        if (!$this->unlink($flavourpath)) {
+            debugging('Unable to delete ' . $flavourpath);
+        }
             
         session_get_instance()->write_close();
         send_file($zipfilepath, basename($zipfilepath));
-            
-        // Delete flavour $hash folder
-        $this->clean_temp_folder();
         
         // To avoid the html headers and all the print* stuff
         die();

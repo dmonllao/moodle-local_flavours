@@ -52,14 +52,14 @@ class flavours_deployment extends flavours {
         // Saving the flavour file
         $flavourfilename = $flavourpath . '/flavour.zip';
         if (!$previousform->save_file('flavourfile', $flavourfilename, true)) {
-            $this->clean_temp_folder($flavourpath);
+            $this->unlink($flavourpath);
             redirect($errorredirect, get_string('errordeployflavour', 'local_flavours'), 4);
         }
         
         // Opening zip
         $flavourzip = new ZipArchive();
         if (!$flavourzip->open($flavourfilename, 0)) {
-            $this->clean_temp_folder($flavourpath);
+            $this->unlink($flavourpath);
             redirect($errorredirect, get_string('errordeployflavour', 'local_flavours'), 4);
         }
         
@@ -120,7 +120,7 @@ class flavours_deployment extends flavours {
 
         $form = new flavours_deployment_form($this->url);
         if (!$formdata = $form->get_data()) {
-            $this->clean_temp_folder($flavourpath);
+            $this->unlink($flavourpath);
             redirect($errorredirect, get_string('reselect', 'local_flavours'), 2);
         }
 
@@ -130,7 +130,7 @@ class flavours_deployment extends flavours {
         
         // Getting the ingredients to deploy
         if (!$flavouringredients = $this->get_ingredients_from_form()) {
-            $this->clean_temp_folder($flavourpath);
+            $this->unlink($flavourpath);
             redirect($errorredirect, get_string('reselect', 'local_flavours'), 2);
         }
         
@@ -141,7 +141,7 @@ class flavours_deployment extends flavours {
         
         $flavourzip = new ZipArchive();
         if (!$flavourzip->open($flavourfilename, 0)) {
-            $this->clean_temp_folder($flavourpath);
+            $this->unlink($flavourpath);
             redirect($errorredirect, get_string('errordeployflavour', 'local_flavours'), 4);
         }
         
@@ -200,10 +200,12 @@ class flavours_deployment extends flavours {
         $this->output = html_writer::table($table);
         
         // Finishing
-        $this->clean_temp_folder($flavourpath);
+        $this->unlink($flavourpath);
         
         $notificationsurl = new moodle_url($CFG->wwwroot . '/admin/index.php');
-        $this->output .= $OUTPUT->single_button($notificationsurl, get_string('deployment_continue', 'local_flavours'));
+        $this->output .= '<div class="generalbox">';
+        $this->output .= $OUTPUT->single_button($notificationsurl, get_string('deploymentcontinue', 'local_flavours'));
+        $this->output .= '</div>';
     }
     
     

@@ -181,7 +181,9 @@ abstract class flavours {
                 
                 $ingredienttype = array_shift($namespace);
                 
-                $namespace = preg_replace('/[^a-zA-Z_]/i', '', $namespace);
+                foreach ($namespace as $key => $value) {
+                    $namespace[$key] = preg_replace('/[^a-zA-Z_]/i', '', $value);
+                }
                 $ingredientpath = implode('/', $namespace);
 
                 // Only organized by ingredient type, each type will  

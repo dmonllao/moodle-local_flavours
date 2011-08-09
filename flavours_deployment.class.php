@@ -72,7 +72,7 @@ class flavours_deployment extends flavours {
         $toform->name = $xml->name[0];
         $toform->description = $xml->description;
         $toform->author = $xml->author;
-        $toform->timecreated = $xml->timecreated;
+        $toform->timecreated = userdate($xml->timecreated);
         $toform->moodlerelease = $xml->moodlerelease;
         $toform->moodleversion = $xml->moodleversion;
         
@@ -202,8 +202,8 @@ class flavours_deployment extends flavours {
         // Finishing
         $this->clean_temp_folder($flavourpath);
         
-        // TODO: Add a button/link to 'Notifications' to install/upgrade plugins
-        // TODO: Add a button/link to 'Update the deployed language packs
+        $notificationsurl = new moodle_url($CFG->wwwroot . '/admin/index.php');
+        $this->output .= $OUTPUT->single_button($notificationsurl, get_string('deployment_continue', 'local_flavours'));
     }
     
     

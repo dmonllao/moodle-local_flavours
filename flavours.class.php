@@ -26,6 +26,8 @@ abstract class flavours {
             mkdir($this->flavourstmpfolder, $CFG->directorypermissions);
         }
         
+        // TODO: Think of a way to clean the temp folders on workflow exceptions
+        
         // Getting the system ingredient types
         $this->set_ingredient_types();
     }
@@ -179,7 +181,7 @@ abstract class flavours {
                 
                 $ingredienttype = array_shift($namespace);
                 
-                // TODO: Ensure $namespace values are only a-zA-Z_
+                $namespace = preg_replace('/[^a-zA-Z_]/i', '', $namespace);
                 $ingredientpath = implode('/', $namespace);
 
                 // Only organized by ingredient type, each type will  

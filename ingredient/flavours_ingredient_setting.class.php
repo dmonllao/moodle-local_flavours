@@ -14,6 +14,15 @@ require_once($CFG->dirroot . '/local/flavours/ingredient/flavours_ingredient.cla
 class flavours_ingredient_setting extends flavours_ingredient {
     
     /**
+     * For the settings with more than one value
+     * 
+     * The extra values will be attributes of the "main" setting, using the CFG setting name
+     * to ease the deployment. 
+     * @var array
+     */ 
+    private $multiplevaluemapping = array('fix' => '_adv', 'adv' => '_adv', 'locked' => '_locked');
+    
+    /**
      * Sets the ingredient name and identifier
      */
     public function __construct() {
@@ -65,9 +74,19 @@ class flavours_ingredient_setting extends flavours_ingredient {
             
             // Adding settings
             foreach ($settings as $setting) {
+            	
+            	// Getting the attributes of the tag
+            	$attrs = array('plugin' => $setting->plugin);
+            	
+            	// Adding the extra values of the setting (if present) to the attributes array
+            	if (!empty($setting->attrs)) {
+            		$attrs = array_merge($attrs, $setting->attrs);
+            		$attrs['hasextra'] = '1';
+            	}
+            	
                 $xmlwriter->full_tag($setting->name, 
                     $this->get_setting_value($setting->name, $setting->plugin),
-                    array('plugin' => $setting->plugin));
+                    $attrs);
             }
             
             $xmlwriter->end_tag($settingspagetagname);
@@ -128,7 +147,6 @@ class flavours_ingredient_setting extends flavours_ingredient {
         	// Getting settings and overwritting
         	$pagesettings = $xmlingredients->$xmlingredient->children();
         	
-        	// TODO: Take into account the settings of existing plugins to avoid overwrite
         	$settingsproblemsarray = array();
         	foreach ($pagesettings as $settingname => $settingdata) {
 
@@ -142,6 +160,17 @@ class flavours_ingredient_setting extends flavours_ingredient {
         		}
         		
         		set_config($settingname, $settingdata[0], $plugin);
+        		
+        		// If it's a setting with multiple values set them
+        		if (!empty($settingdata->attributes()->hasextra)) {
+        			$attrs = $settingdata->attributes()->hasextra;
+        			foreach ($attrs as $key => $value) {
+        				
+        				if ($key != 'hasextra' && $key != 'plugin') {
+        				    set_config($key, $value, $plugin);
+        				}
+        			}
+        		} 
         	}
         }
         
@@ -162,7 +191,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
      * @param boolean $addsettings Should settings be included?
      */
     protected function get_branch_settings($admintreebranch, &$branch, $addsettings = false) {
-
+    	
         foreach ($admintreebranch as $key => $child) {
 
             // Adding settings category and it's children
@@ -186,14 +215,27 @@ class flavours_ingredient_setting extends flavours_ingredient {
                 if ($addsettings && !empty($child->settings)) {
                     foreach ($child->settings as $settingname => $setting) {
                         
-                        // TODO: Take into account the _with_advanced....
                         // TODO: Solve problem with plugins settings namespaces
                         if ($setting->plugin == '') {
                             $branch->branches[$child->name]->settings[$settingname]->plugin = 'core';
                         } else {
                             $branch->branches[$child->name]->settings[$settingname]->plugin = $setting->plugin;
                         }
+                        
+                        // Setting value
                         $branch->branches[$child->name]->settings[$settingname]->name = $settingname;
+                        
+                        // Look for (.*?)_adv settings and add them as attributes 
+                        if (is_array($setting->defaultsetting)) {
+                        	foreach ($setting->defaultsetting as $key => $value) {
+                        		
+                        		// Value is the name of the "main" value
+                        		if ($key != 'value' && isset($this->multiplevaluemapping[$key])) {
+                        			$cfgkey = $settingname . $this->multiplevaluemapping[$key];
+                        			$branch->branches[$child->name]->settings[$settingname]->attrs[$cfgkey] = $value;
+                        		}
+                        	}
+                        }
                     }
                 }
             }

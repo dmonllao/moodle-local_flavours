@@ -92,6 +92,10 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         // Required to find plugin types paths
         $plugintypesdata = get_plugin_types();
         
+        // To find the plugins versions
+        $pluginman = plugin_manager::instance();
+        $systemplugins = $pluginman->get_plugins(true);
+        
         mkdir($path . '/' . $this->id, $CFG->directorypermissions);
         
         // A first iteration to group ingredients by plugin type
@@ -138,10 +142,19 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                     ltrim($plugintypebasepath, '/') . '/' . $ingredient);
                 
                 // The plugin version and required moodle version
-                $ingredientpath = $plugintypepath . '/' . $ingredient;
-                $pluginversion = $this->get_system_plugin_version($ingredientpath);
-                $xmlwriter->full_tag('version', $pluginversion->version);
-                $xmlwriter->full_tag('requires', $pluginversion->requires);
+                if (!empty($systemplugins[$plugintype][$ingredient]->versionrequires)) {
+                    $requires = $systemplugins[$plugintype][$ingredient]->versionrequires;
+                } else {
+                    $requires = '';
+                }
+                if (!empty($systemplugins[$plugintype][$ingredient]->versiondisk)) {
+                	$version = $systemplugins[$plugintype][$ingredient]->versiondisk;
+                } else {
+                	$version = '';
+                }
+                
+                $xmlwriter->full_tag('versiondisk', $version);
+                $xmlwriter->full_tag('requires', $requires);
                 $xmlwriter->end_tag($ingredient);
             }
             
@@ -192,14 +205,14 @@ class flavours_ingredient_plugin extends flavours_ingredient {
 	                }
 	                
 	                // Overwrite if newer release on flavour
-	                // TODO: Take into account plugins without ->version
-	                if (!empty($systemplugin) && $overwrite && $plugindata->version <= $systemplugin->versiondisk) {
+	                // TODO: Take into account plugins without ->versiondisk
+	                if (!empty($systemplugin) && $overwrite && $plugindata->versiondisk <= $systemplugin->versiondisk) {
 	                    $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginflavournotnewer'] = $pluginfull;
 	                }
             	}
             	
                 // Required Moodle version to use the plugin
-                if (!empty($plugindata->requires) && $CFG->version < $plugindata->requires) {
+                if (!empty($plugindata->requires) && $CFG->versiondisk < $plugindata->requires) {
                     $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginsystemold'] = $pluginfull;
                 }
                 
@@ -303,41 +316,6 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         }
         
         return $pluginvisiblename;
-    }
-    
-    /**
-     * Returns the version of the plugin from version.php
-     * 
-     * @param string $pluginpath
-     * @return string The plugin version on moodle usual format
-     */
-    private function get_system_plugin_version($pluginpath) {
-        global $CFG;
-        
-        $versionpath = $pluginpath . '/version.php';
-
-        // If it doesn't exists we will add '' as the values
-        if (file_exists($versionpath)) {
-            include($versionpath);
-        }
-        
-        if (!empty($plugin)) {
-            $returnvalue = $plugin;
-        } else if (!empty($module)) {
-            $returnvalue = $module;
-        }
-        
-        // No value then the deployment will know what to do
-        if (empty($returnvalue) || empty($returnvalue->version)) {
-            $returnvalue->version = '';
-        }
-        
-        // No value then the deployment will know what to do
-        if (empty($returnvalue) || empty($returnvalue->requires)) {
-            $returnvalue->requires = '';
-        }
-        
-        return $returnvalue;
     }
     
 }

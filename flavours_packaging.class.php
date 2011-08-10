@@ -121,9 +121,9 @@ class flavours_packaging extends flavours {
         }
         
         // Delete flavour $hash folder
-        if (!$this->unlink($flavourpath)) {
-            debugging('Unable to delete ' . $flavourpath);
-        }
+//        if (!$this->unlink($flavourpath)) {
+//            debugging('Unable to delete ' . $flavourpath);
+//        }
             
         session_get_instance()->write_close();
         send_file($zipfilepath, basename($zipfilepath));

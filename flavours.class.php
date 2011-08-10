@@ -182,7 +182,7 @@ abstract class flavours {
                 $ingredienttype = array_shift($namespace);
                 
                 foreach ($namespace as $key => $value) {
-                    $namespace[$key] = preg_replace('/[^a-zA-Z_]/i', '', $value);
+                    $namespace[$key] = preg_replace('/[^0-9a-zA-Z_]/i', '', $value);
                 }
                 $ingredientpath = implode('/', $namespace);
 

@@ -125,8 +125,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                 // Recursive copy
                 $topath = $plugintypeflavourpath . '/' . $ingredient;
                 if (!$this->copy($frompath, $topath)) {
-                    debugging($frompath);
-                    debugging($topath);
+                    debugging($frompath . '---' . $topath);
                     print_error('errorcopying', 'local_flavours');
                 }
                 
@@ -158,6 +157,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
      * @param SimpleXMLElement $xml
      */
     public function get_flavour_info($xml) {
+        global $CFG;
         
     	$overwrite = required_param('overwrite', PARAM_INT);
     	
@@ -192,13 +192,16 @@ class flavours_ingredient_plugin extends flavours_ingredient {
 	                }
 	                
 	                // Overwrite if newer release on flavour
-	                // TODO: versiondisk or versiondb???
 	                // TODO: Take into account plugins without ->version
-	                // TODO: Check the ->requires
 	                if (!empty($systemplugin) && $overwrite && $plugindata->version <= $systemplugin->versiondisk) {
 	                    $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginflavournotnewer'] = $pluginfull;
 	                }
             	}
+            	
+                // Required Moodle version to use the plugin
+                if (!empty($plugindata->requires) && $CFG->version < $plugindata->requires) {
+                    $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginsystemold'] = $pluginfull;
+                }
                 
                 $this->branches[$plugintype]->id = $plugintype;
                 $this->branches[$plugintype]->name = $pluginman->plugintype_name_plural($plugintype);

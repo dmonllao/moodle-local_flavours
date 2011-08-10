@@ -76,7 +76,8 @@ class flavours_ingredient_setting extends flavours_ingredient {
             foreach ($settings as $setting) {
             	
             	// Getting the attributes of the tag
-            	$attrs = array('plugin' => $setting->plugin);
+            	// Some plugins has slashes, not availables as part of the tag name
+            	$attrs = array('plugin' => str_replace('/', '.', $setting->plugin));
             	
             	// Adding the extra values of the setting (if present) to the attributes array
             	if (!empty($setting->attrs)) {
@@ -159,6 +160,9 @@ class flavours_ingredient_setting extends flavours_ingredient {
         			$plugin = null;
         		}
         		
+        		// Restoring the slashes removed on packaging
+        		$plugin = str_replace('.', '/', $plugin);
+        		
         		set_config($settingname, $settingdata[0], $plugin);
         		
         		// If it's a setting with multiple values set them
@@ -215,10 +219,12 @@ class flavours_ingredient_setting extends flavours_ingredient {
                 if ($addsettings && !empty($child->settings)) {
                     foreach ($child->settings as $settingname => $setting) {
                         
-                        // TODO: Solve problem with plugins settings namespaces
                         if ($setting->plugin == '') {
                             $branch->branches[$child->name]->settings[$settingname]->plugin = 'core';
                         } else {
+                        	
+                        	// Some plugins has slashes, not availables as part of the tag name
+                        	$setting->plugin = str_replace('/', '.', $setting->plugin);
                             $branch->branches[$child->name]->settings[$settingname]->plugin = $setting->plugin;
                         }
                         

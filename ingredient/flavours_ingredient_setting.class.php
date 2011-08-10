@@ -48,7 +48,6 @@ class flavours_ingredient_setting extends flavours_ingredient {
         $adminroot = & admin_get_root();
         $this->get_branch_settings($adminroot->children, $this, true);
 
-        // TODO: Monitor performance
         foreach ($ingredientsdata as $settingspage) {
             
             // Settings page path
@@ -128,12 +127,13 @@ class flavours_ingredient_setting extends flavours_ingredient {
         	
         	// Getting settings and overwritting
         	$pagesettings = $xmlingredients->$xmlingredient->children();
-
+        	
         	// TODO: Take into account the settings of existing plugins to avoid overwrite
+        	$settingsproblemsarray = array();
         	foreach ($pagesettings as $settingname => $settingdata) {
-        		
-        		// TODO: Maybe a $problem?
+
         		if (!$plugin = $settingdata->attributes()->plugin) {
+        			$settingsproblemsarray[$ingredient][] = $settingname;
         			continue;
         		}
         		
@@ -143,6 +143,11 @@ class flavours_ingredient_setting extends flavours_ingredient {
         		
         		set_config($settingname, $settingdata[0], $plugin);
         	}
+        }
+        
+        // Imploding settings of the same settings page with problems 
+        foreach ($settingsproblemsarray as $ingredient => $settingsarray) {
+        	$problems[$ingredient]['settingsettingproblems'] = implode(', ', $settingsarray);
         }
 
         return $problems;

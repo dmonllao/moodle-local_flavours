@@ -48,6 +48,7 @@ $string['restrictionpluginnowritable'] = 'Wrong permissions to install or upgrad
 $string['restrictionpluginnotfound'] = 'Plugin "{$a}" not found';
 $string['restrictionpluginsystemold'] = 'The plugin requires an higher Moodle version';
 $string['restrictionsettingnosettingpage'] = 'The setttings page "{$a}" does not exists';
+$string['restrictionsettingsproblemsarray'] = 'Problems deploying this settings: "{$a}"';
 $string['selectfile'] = 'Select file';
 $string['selectingredients'] = 'Select ingredients';
 $string['selectingredientstodeploy'] = 'Select ingredients to deploy';

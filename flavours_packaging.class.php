@@ -63,7 +63,6 @@ class flavours_packaging extends flavours {
         }
             
         // Starting <xml>
-        // TODO: Replace for file_xml_output()
         $xmloutput = new memory_xml_output();
         $xmlwriter = new xml_writer($xmloutput);
         $xmlwriter->start();
@@ -120,6 +119,7 @@ class flavours_packaging extends flavours {
             print_error('errorpackaging', 'local_flavours');
         }
         
+        // TODO: Think of it!!! send the file -> remove or remove -> send the file, nothing ok!
         // Delete flavour $hash folder
 //        if (!$this->unlink($flavourpath)) {
 //            debugging('Unable to delete ' . $flavourpath);

@@ -212,7 +212,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
             	}
             	
                 // Required Moodle version to use the plugin
-                if (!empty($plugindata->requires) && $CFG->versiondisk < $plugindata->requires) {
+                if (!empty($plugindata->requires) && $CFG->version < $plugindata->requires) {
                     $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginsystemold'] = $pluginfull;
                 }
                 

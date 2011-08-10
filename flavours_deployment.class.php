@@ -166,6 +166,8 @@ class flavours_deployment extends flavours {
                 
             // Prepare to display deployment results
             foreach ($ingredientstodeploy as $ingredientname => $ingredientdata) {
+            	
+            	// Then success
             	if (empty($outputs[$type][$ingredientname])) {
             		$outputs[$type][$ingredientname] = true;
             	}

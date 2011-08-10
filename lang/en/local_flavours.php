@@ -46,6 +46,7 @@ $string['restrictionplugincopyerror'] = 'Error copying';
 $string['restrictionpluginflavournotnewer'] = 'The flavour version not newer than the installed version';
 $string['restrictionpluginnowritable'] = 'Wrong permissions to install or upgrade on "{$a}"';
 $string['restrictionpluginnotfound'] = 'Plugin "{$a}" not found';
+$string['restrictionpluginnoversiondiskupgrade'] = 'The plugin "{$a}" already exists and can\'t be upgraded, the flavour one does not contains the version';
 $string['restrictionpluginsystemold'] = 'The plugin requires an higher Moodle version';
 $string['restrictionsettingnosettingpage'] = 'The setttings page "{$a}" does not exists';
 $string['restrictionsettingsproblemsarray'] = 'Problems deploying this settings: "{$a}"';

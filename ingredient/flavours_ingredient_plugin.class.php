@@ -204,11 +204,18 @@ class flavours_ingredient_plugin extends flavours_ingredient {
 	                	$this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginalreadyinstalled'] = $pluginfull;
 	                }
 	                
+                    // If the flavour plugin doesn't have a versiondisk (filters for example) 
+                    // don't overwrite
+                    if (empty($plugindata->versiondisk)) {
+                    	$this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginnoversiondiskupgrade'] = $pluginfull;
+                    }
+	                
 	                // Overwrite if newer release on flavour
-	                // TODO: Take into account plugins without ->versiondisk
-	                if (!empty($systemplugin) && $overwrite && $plugindata->versiondisk <= $systemplugin->versiondisk) {
+	                if (!empty($systemplugin) && $overwrite && !empty($plugindata->versiondisk) && 
+	                   $plugindata->versiondisk <= $systemplugin->versiondisk) {
 	                    $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginflavournotnewer'] = $pluginfull;
 	                }
+	                
             	}
             	
                 // Required Moodle version to use the plugin

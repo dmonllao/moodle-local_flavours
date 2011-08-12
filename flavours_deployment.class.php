@@ -189,10 +189,10 @@ class flavours_deployment extends flavours {
         		// Success
         		if (is_bool($outputs)) {
         			$feedback = get_string('success');
-        			$classname = 'flavours_deployment_success';
+        			$classname = 'notifysuccess';
         		} else {
         			$feedback = $this->get_restrictions_string($outputs);
-        			$classname = 'error';
+        			$classname = 'notifyproblem';
         		}
         		
         		$feedback = '<span class="' . $classname . '">' . $feedback . '</span>';

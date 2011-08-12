@@ -26,7 +26,8 @@ abstract class flavours {
             mkdir($this->flavourstmpfolder, $CFG->directorypermissions);
         }
         
-        // TODO: Think of a way to clean the temp folders on workflow exceptions
+        // Clean garbage caused by the packaging system or workflow exceptions
+        $this->clean_garbage();
         
         // Getting the system ingredient types
         $this->set_ingredient_types();
@@ -285,5 +286,33 @@ abstract class flavours {
 
         
         return implode(' / ', $strs);
+    }
+    
+    
+    /**
+     * Deletes all the old moodledata/temp/flavours folders
+     */
+    protected function clean_garbage() {
+    	global $CFG;
+    	
+    	$olderthan = 3600;   // One hour
+    	$now = time();
+
+    	$path = $CFG->dataroot . '/temp/flavours';
+    	
+        $dir = opendir($path);
+        while (false !== ($file = readdir($dir))) {
+            if ($file == "." || $file == "..") {
+                continue;
+            }
+            
+            $filepath = $path . '/' . $file;
+            
+            // If it's older than $olderthan remove it
+            if ($now > (filemtime($filepath) + $olderthan)) {
+            	$this->unlink($filepath);
+            }
+        }
+        closedir($dir);
     }
 }

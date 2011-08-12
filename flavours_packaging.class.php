@@ -9,6 +9,14 @@ require_once($CFG->dirroot . '/local/flavours/flavours.class.php');
 require_once($CFG->dirroot . '/local/flavours/forms/flavours_packaging_form.php');
 require_once($CFG->dirroot . '/local/flavours/flavours_xml_transformer.class.php');
 
+/**
+ * Packaging system manager
+ * 
+ * @package local
+ * @subpackage flavours
+ * @copyright 2011 David Monllaó
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class flavours_packaging extends flavours {
     
     /**
@@ -43,7 +51,6 @@ class flavours_packaging extends flavours {
     /**
      * Packages the entire flavour and returns it
      * @todo Add a checksum
-     * @todo Wrap tags data with CDATA
      */
     public function packaging_execute() {
         
@@ -121,11 +128,6 @@ class flavours_packaging extends flavours {
             print_error('errorpackaging', 'local_flavours');
         }
         
-        // Delete flavour $hash folder
-//        if (!$this->unlink($flavourpath)) {
-//            debugging('Unable to delete ' . $flavourpath);
-//        }
-            
         session_get_instance()->write_close();
         send_file($zipfilepath, basename($zipfilepath));
         

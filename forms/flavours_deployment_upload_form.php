@@ -2,7 +2,14 @@
 
 require_once($CFG->dirroot.'/lib/formslib.php');
 
-
+/**
+ * Form to upload a flavour
+ * 
+ * @package local
+ * @subpackage flavours
+ * @copyright 2011 David Monllaó
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class flavours_deployment_upload_form extends moodleform {
 
 

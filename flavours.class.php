@@ -2,6 +2,11 @@
 
 /**
  * Common methods
+ * 
+ * @package local
+ * @subpackage flavours
+ * @copyright 2011 David Monllaó
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class flavours {
 

@@ -2,6 +2,15 @@
 
 require_once($CFG->libdir . '/formslib.php');
 
+
+/**
+ * Form to select the flavour ingredients
+ * 
+ * @package local
+ * @subpackage flavours
+ * @copyright 2011 David Monllaó
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class flavours_packaging_form extends moodleform {
     
     public function definition() {

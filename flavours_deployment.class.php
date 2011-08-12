@@ -1,6 +1,6 @@
 <?php 
 
-require_once($CFG->libdir.'/filestorage/zip_packer.php');
+require_once($CFG->libdir . '/filestorage/zip_packer.php');
 
 require_once($CFG->dirroot . '/local/flavours/flavours.class.php');
 require_once($CFG->dirroot . '/local/flavours/forms/flavours_deployment_upload_form.php');
@@ -67,7 +67,7 @@ class flavours_deployment extends flavours {
         $xml = $this->get_flavour_xml($flavourzip);
         
         $flavourzip->close();
-        
+
         $toform = new stdClass();
         $toform->name = $xml->name[0];
         $toform->description = $xml->description;
@@ -221,7 +221,7 @@ class flavours_deployment extends flavours {
         $flavourxml = $flavourzip->getFromName('flavour/flavour.xml');
         
         // Parsing the .xml content to extract flavour info
-        return simplexml_load_string($flavourxml);
+        return simplexml_load_string($flavourxml, null, LIBXML_NOCDATA);
     }
     
 }

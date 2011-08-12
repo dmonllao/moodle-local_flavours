@@ -1,13 +1,13 @@
 <?php 
 
-require_once($CFG->libdir.'/filestorage/zip_packer.php');
-require_once($CFG->dirroot.'/backup/util/xml/xml_writer.class.php');
-require_once($CFG->dirroot.'/backup/util/xml/output/xml_output.class.php');
-require_once($CFG->dirroot.'/backup/util/xml/output/memory_xml_output.class.php');
+require_once($CFG->libdir . '/filestorage/zip_packer.php');
+require_once($CFG->dirroot . '/local/flavours/flavours_xml_writer.class.php');
+require_once($CFG->dirroot . '/local/flavours/flavours_xml_transformer.class.php');
+require_once($CFG->dirroot . '/backup/util/xml/output/xml_output.class.php');
+require_once($CFG->dirroot . '/backup/util/xml/output/memory_xml_output.class.php');
 
 require_once($CFG->dirroot . '/local/flavours/flavours.class.php');
 require_once($CFG->dirroot . '/local/flavours/forms/flavours_packaging_form.php');
-require_once($CFG->dirroot . '/local/flavours/flavours_xml_transformer.class.php');
 
 /**
  * Packaging system manager
@@ -73,7 +73,7 @@ class flavours_packaging extends flavours {
         // Starting <xml>
         $xmloutput = new memory_xml_output();
         $xmltransformer = new flavours_xml_transformer();
-        $xmlwriter = new xml_writer($xmloutput, $xmltransformer);
+        $xmlwriter = new flavours_xml_writer($xmloutput, $xmltransformer);
         $xmlwriter->start();
         $xmlwriter->begin_tag('flavour');
         $xmlwriter->full_tag('name', $data->name);

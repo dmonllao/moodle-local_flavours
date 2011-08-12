@@ -272,7 +272,14 @@ abstract class flavours {
         $strs = array();
         if ($restrictions) {
             foreach ($restrictions as $restriction => $a) {
-                $strs[] = get_string('restriction'.$restriction, 'local_flavours', $a);
+            	
+            	if (strstr($restriction, 'warning') != false) {
+            		$prefixstr = 'warning';
+            	} else {
+            		$prefixstr = 'problem';
+            	}
+                $strs[] = get_string($prefixstr, 'local_flavours') . ' ' .
+                          get_string('restriction'.$restriction, 'local_flavours', $a);
             }
         }
 

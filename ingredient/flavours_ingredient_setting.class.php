@@ -23,6 +23,17 @@ class flavours_ingredient_setting extends flavours_ingredient {
     private $multiplevaluemapping = array('fix' => '_adv', 'adv' => '_adv', 'locked' => '_locked');
     
     /**
+     * Manages the warnings output
+     * 
+     * There should be a warning on the preview screen but the execution results
+     * should display feedback. deploy_ingredients() sets it and get_flavour_branches() 
+     * treats it
+     *  
+     * @var bool 
+     */
+    private $displaywarnings = true;
+    
+    /**
      * Sets the ingredient name and identifier
      */
     public function __construct() {
@@ -133,6 +144,9 @@ class flavours_ingredient_setting extends flavours_ingredient {
     public function deploy_ingredients($ingredients, $path, SimpleXMLElement $xml) {
 
     	$problems = array();
+    	
+    	// We don't want warnings, we want real feeback
+    	$this->displaywarnings = false;
     	
         $xmlingredients = $xml->children();
         
@@ -306,12 +320,17 @@ class flavours_ingredient_setting extends flavours_ingredient {
         if (empty($systemsettings[$node])) {
             
             $branch[$node]->restrictions['settingnosettingpage'] = true;
-            
+
             // Can't be shown if we leave the name empty
             $branch[$node]->name = $node;
             return false;
         }
         
+        // Display warnings, basically on preview
+        if ($this->displaywarnings) {
+            $branch[$node]->restrictions['settingwarningoverwrite'] = true;
+        }
+            
         $branch[$node]->name = $systemsettings[$node]->name;
         
         // Continue reaching the settings page

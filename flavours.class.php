@@ -96,7 +96,7 @@ abstract class flavours {
 	                    $string .= $this->get_restrictions_string($data->restrictions);
 	                    $string .= '</span>';
 	                }
-	                $output .= '<li><a target="'.$branchprefix.'">'.$string.'</strong></a></li>';
+	                $output .= '<li><a target="'.$branchprefix.'">'.$string.'</a></li>';
 	
 	            // Let's get the branch children
 	            } else {

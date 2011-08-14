@@ -12,7 +12,6 @@ require_once($CFG->dirroot.'/lib/formslib.php');
  */
 class flavours_deployment_upload_form extends moodleform {
 
-
     function definition () {
 
         global $CFG;

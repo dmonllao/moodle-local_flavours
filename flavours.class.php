@@ -1,7 +1,7 @@
 <?php 
 
 /**
- * Common methods
+ * Common methods to manage the packaging and deployment of Moodle flavours
  * 
  * @package local
  * @subpackage flavours

@@ -92,9 +92,10 @@ class flavours_ingredient_customlang extends flavours_ingredient_lang {
             }
         
             // Installed language?
-            if (empty($systemlangs[$lang])) {
-                $this->branches[$lang]->restrictions['customlangnotinstalled'] = $lang;
-            }
+//            // Commented to avoid problem when deploying customlangs before langs
+//            if (empty($systemlangs[$lang])) {
+//                $this->branches[$lang]->restrictions['customlangnotinstalled'] = $lang;
+//            }
             
             // Custom strings already created?
             if (!empty($customs[$lang . '_local'])) {

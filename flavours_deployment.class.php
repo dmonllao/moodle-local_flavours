@@ -73,8 +73,9 @@ class flavours_deployment extends flavours {
         $toform->description = $xml->description;
         $toform->author = $xml->author;
         $toform->timecreated = userdate($xml->timecreated);
-        $toform->moodlerelease = $xml->moodlerelease;
-        $toform->moodleversion = $xml->moodleversion;
+        $toform->sourceurl = $xml->sourceurl;
+        $toform->sourcemoodlerelease = $xml->sourcemoodlerelease;
+        $toform->sourcemoodleversion = $xml->sourcemoodleversion;
         
         // Adding the over-write value from the upload flavour form and adding it as hidden
         $toform->overwrite = $formdata->overwrite;

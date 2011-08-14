@@ -22,8 +22,8 @@ class flavours_deployment_form extends moodleform {
         $mform->addElement('header', 'flavourdata', $steplabel);
         
         // Flavour info
-        $fields = array('name', 'description', 'author', 'timecreated', 'moodlerelease',
-            'moodleversion');
+        $fields = array('name', 'description', 'author', 'timecreated', 'sourceurl', 
+            'sourcemoodlerelease', 'sourcemoodleversion');
         foreach ($fields as $field) {
             $label = '<strong>'.get_string('flavour' . $field, 'local_flavours').'</strong>';
             $mform->addElement('static', $field, $label);
@@ -34,9 +34,6 @@ class flavours_deployment_form extends moodleform {
             get_string('selectingredients', 'local_flavours'));
         $mform->addElement('html', '<div id="id_ingredients_tree" class="ygtv-checkbox">'.
             $this->_customdata["treedata"].'</div>');
-    
-        // Alerts
-        // TODO: Manage hide/show with JS and the checked boxes 
 
         $mform->addElement('hidden', 'overwrite');
         $mform->addElement('hidden', 'flavourhash', $this->_customdata['flavourhash']);

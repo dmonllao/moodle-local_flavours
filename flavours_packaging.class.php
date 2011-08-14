@@ -80,8 +80,9 @@ class flavours_packaging extends flavours {
         $xmlwriter->full_tag('description', $data->description);
         $xmlwriter->full_tag('author', $data->author);
         $xmlwriter->full_tag('timecreated', time());
-        $xmlwriter->full_tag('moodlerelease', $CFG->release);
-        $xmlwriter->full_tag('moodleversion', $CFG->version);
+        $xmlwriter->full_tag('sourceurl', $CFG->wwwroot);
+        $xmlwriter->full_tag('sourcemoodlerelease', $CFG->release);
+        $xmlwriter->full_tag('sourcemoodleversion', $CFG->version);
             
         // Random code to store the flavour data
         $hash = sha1('flavour_'.$USER->id.'_'.time());

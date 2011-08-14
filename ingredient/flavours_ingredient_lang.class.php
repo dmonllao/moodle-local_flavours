@@ -29,7 +29,7 @@ class flavours_ingredient_lang extends flavours_ingredient {
         $this->id = 'lang';
         $this->name = get_string('language');
         
-        $this->langpath = $CFG->dataroot . '/lang/';
+        $this->langpath = $CFG->dataroot . '/lang';
     }
     
 
@@ -85,7 +85,7 @@ class flavours_ingredient_lang extends flavours_ingredient {
             $language = get_string_manager()->load_component_strings('langconfig', $langid);
             $xmlwriter->begin_tag($langid);
             $xmlwriter->full_tag('name', $language['thislanguage']);
-            $xmlwriter->full_tag('path', $this->id . '/' . $langid);
+            $xmlwriter->full_tag('path', $langid);
                 
             // Moodle doesn't have a language versioning system
             // $xmlwriter->full_tag('version', ...);
@@ -166,7 +166,7 @@ class flavours_ingredient_lang extends flavours_ingredient {
                 continue;
             }
             
-            $langpath = $CFG->dataroot . '/lang/' . $this->get_lang_dir($ingredient);
+            $langpath = $this->langpath . '/' . $this->get_lang_dir($ingredient);
             mkdir($langpath, $CFG->directorypermissions);
             
             $tmplangpath = $path . '/' . $this->get_lang_dir($ingredient);

@@ -137,8 +137,8 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                 $xmlwriter->begin_tag($ingredient);
                 $xmlwriter->full_tag('name', 
                     $this->get_system_plugin_visiblename($plugintype, $ingredient));
-                $xmlwriter->full_tag('flavourpath', $plugintype . '/' . $ingredient);
-                $xmlwriter->full_tag('moodlepath', 
+//                $xmlwriter->full_tag('flavourpath', $plugintype . '/' . $ingredient);
+                $xmlwriter->full_tag('path', 
                     ltrim($plugintypebasepath, '/') . '/' . $ingredient);
                 
                 // The plugin version and required moodle version
@@ -205,8 +205,9 @@ class flavours_ingredient_plugin extends flavours_ingredient {
 	                }
 	                
                     // If the flavour plugin doesn't have a versiondisk (filters for example) 
-                    // don't overwrite
-                    if (empty($plugindata->versiondisk)) {
+                    // don't overwrite (and skip notification if the upper one has been displayed
+                    if (empty($plugindata->versiondisk) && 
+                        empty($this->branches[$plugintype]->branches[$pluginname]->restrictions)) {
                     	$this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginnoversiondiskupgrade'] = $pluginfull;
                     }
 	                
@@ -293,8 +294,9 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         	}
         	
         	// Copy the new contents where the flavour says
-        	$tmppath = $path . '/' . $xml->{$type}->{$ingredient}->flavourpath;
+        	$tmppath = $path . '/' . $xml->{$type}->{$ingredient}->path;
         	if (!$this->copy($tmppath, $ingredientpath)) {
+        		debugging('From : ' . $tmppath . ' To: ' . $ingredientpath);
         		$problems[$selection]['plugincopyerror'] = $selection;
         	}
         }

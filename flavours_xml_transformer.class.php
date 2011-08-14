@@ -21,7 +21,8 @@ class flavours_xml_transformer extends xml_contenttransformer {
     	
     	if (is_numeric($content) || 
     	    is_null($content) || 
-    	    is_bool($content)) {
+    	    is_bool($content) || 
+    	    $content == '') {
     	    	return $content;
     	}
     	

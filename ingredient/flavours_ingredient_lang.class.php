@@ -13,13 +13,23 @@ require_once($CFG->dirroot . '/local/flavours/ingredient/flavours_ingredient.cla
  */
 class flavours_ingredient_lang extends flavours_ingredient {
 
-    
+	
+    /**
+     * The path where the language packs are stored
+     * @var string
+     */
+	protected $langpath;
+	
     /**
      * Sets the ingredient name and identifier
      */
     public function __construct() {
+    	global $CFG;
+    	
         $this->id = 'lang';
         $this->name = get_string('language');
+        
+        $this->langpath = $CFG->dataroot . '/lang/';
     }
     
 
@@ -59,14 +69,14 @@ class flavours_ingredient_lang extends flavours_ingredient {
 
         foreach ($ingredientsdata as $langid) {
 
+        	// External method to allow methods overwrite
+        	$langdirname = $this->get_lang_dir($langid);
+        	
             // All the languages are stored in dataroot, english is the only exception AFAIK
-            $frompath = $CFG->dataroot . '/lang/' . $langid;
-            if (!file_exists($frompath)) {
-                $frompath = $CFG->dirroot . '/lang/' . $langid;
-            }
+            $frompath = $this->langpath . '/' . $langdirname;
                 
             // Recursive copy
-            $topath = $path . '/lang/' . $langid;
+            $topath = $path . '/' . $this->id . '/' . $langdirname;
             if (!$this->copy($frompath, $topath)) {
                 debugging($frompath);
                 debugging($topath);
@@ -75,7 +85,7 @@ class flavours_ingredient_lang extends flavours_ingredient {
             $language = get_string_manager()->load_component_strings('langconfig', $langid);
             $xmlwriter->begin_tag($langid);
             $xmlwriter->full_tag('name', $language['thislanguage']);
-            $xmlwriter->full_tag('path', 'lang/' . $langid);
+            $xmlwriter->full_tag('path', $this->id . '/' . $langid);
                 
             // Moodle doesn't have a language versioning system
             // $xmlwriter->full_tag('version', ...);
@@ -156,14 +166,29 @@ class flavours_ingredient_lang extends flavours_ingredient {
                 continue;
             }
             
-            $langpath = $CFG->dataroot . '/lang/' . $ingredient;
+            $langpath = $CFG->dataroot . '/lang/' . $this->get_lang_dir($ingredient);
             mkdir($langpath, $CFG->directorypermissions);
             
-            $tmplangpath = $path . '/' . $ingredient;
-            $this->copy($tmplangpath, $langpath);
+            $tmplangpath = $path . '/' . $this->get_lang_dir($ingredient);
+            if (!$this->copy($tmplangpath, $langpath)) {
+            	debugging('From: ' . $tmplangpath . ' To: '.$langpath);
+            	$problems[$ingredient]['langfilepermissions'] = true;
+            }
         }
         
         return $problems;
     }
     
+    
+    /**
+     * Returns the dir name of the language
+     * 
+     * Useful to allow overwrite of methods
+     * 
+     * @param string $langid
+     * @return string
+     */
+    protected function get_lang_dir($langid) {
+    	return $langid;
+    }
 }

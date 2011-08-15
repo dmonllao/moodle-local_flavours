@@ -5,7 +5,7 @@ M.local_flavours = {
 
 
     /**
-     * Initializes the TreeView object and adds the submit listener
+     * Initializes the TreeView object
      */
     init: function(Y) {
 
@@ -21,6 +21,9 @@ M.local_flavours = {
     },
 
 
+    /**
+     * Outputs the tree
+     */
     render: function(Y, expandall) {
 
         var context = M.local_flavours;
@@ -33,6 +36,19 @@ M.local_flavours = {
         if (expandall) {
             context.tree.expandAll();
             context.tree.getRoot().highlight();
+
+            // And uncheck the ones with restrictions (the user will be able to check again)
+            // In a happy world I would set an <a> attribute, something like 'checked'
+            var nodes = context.tree.getNodesByProperty('highlightState', '1');  // All
+            if (!YAHOO.lang.isNull(nodes)) {
+                for (var i = 0; i < nodes.length; i++) {
+                	if (nodes[i].target != '_self' && nodes[i].title == undefined) {
+                        nodes[i].toggleHighlight();
+                    }
+                }
+            } else {
+                alert('null');
+            }
         }
 
         // Listener to create one node for each selected setting
@@ -53,7 +69,7 @@ M.local_flavours = {
 
             } else {
 
-                for (var i=0; i<hiLit.length; i++) {
+                for (var i = 0; i < hiLit.length; i++) {
 
                     treeNode = hiLit[i];
 

@@ -112,14 +112,22 @@ abstract class flavours {
                 if (empty($data->branches)) {
 
                     $string = $data->name;
+                    $title = $string;         // We set the title attribute
 
-                    // Should we add restrictions info??
+                    // Should we add restrictions info?
                     if (!empty($data->restrictions)) {
+
+                        // A way to mark which ones have restrictions to work with TreeView
+                        $title = '';
+
                         $string .= ' <span class="error">';
                         $string .= $this->get_restrictions_string($data->restrictions);
                         $string .= '</span>';
                     }
-                    $output .= '<li><a target="'.$branchprefix.'">'.$string.'</a></li>';
+
+                    $output .= '<li><a target="' . $branchprefix . '" title="' . $title . '">' .
+                               $string .
+                               '</a></li>';
 
                 } else {
                     // Let's get the branch children

@@ -66,8 +66,7 @@ class flavours_packaging extends flavours {
         // Fill the ingredients tree with this->ingredients (ondomready)
         $customdata['treedata'] = $this->get_tree_ingredients();
 
-        // Creating the form to display in $this->display()
-        $this->form = new flavours_packaging_form($this->url, $customdata);
+        $this->renderable = new flavours_packaging_form($this->url, $customdata);
     }
 
 

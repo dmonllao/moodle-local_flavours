@@ -38,8 +38,9 @@ abstract class flavours {
     protected $flavourstmpfolder;
     protected $ingredienttypes;
 
-    protected $output;
-    protected $form;
+    // Output
+    protected $renderer;
+    protected $renderable;
 
     public function __construct($action) {
 
@@ -165,33 +166,16 @@ abstract class flavours {
 
 
     /**
-     * Sets the page info and returns the header to output
-     */
-    public function print_header() {
-
-        global $PAGE, $OUTPUT, $SITE;
-
-        $PAGE->set_heading($SITE->fullname);
-        $PAGE->set_title(get_string('action'.$this->action, 'local_flavours'));
-
-        return $OUTPUT->header();
-    }
-
-
-    /**
      * Centralized output
+     * @return string The HTML to display
      */
-    public function display() {
+    public function render() {
 
-        global $OUTPUT;
+        global $PAGE;
 
-        echo $this->print_header();
-
-        if (!empty($this->form)) {
-            $this->form->display();
-        }
-        echo $this->output;
-        echo $OUTPUT->footer();
+        $renderer = $PAGE->get_renderer('local_flavours');
+        
+        return $renderer->render_flavours_wrapper($this->renderable, $this->action);
     }
 
 

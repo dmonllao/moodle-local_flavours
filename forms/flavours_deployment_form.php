@@ -33,7 +33,7 @@ require_once($CFG->libdir . '/formslib.php');
  * @copyright 2011 David Monllaó
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class flavours_deployment_form extends moodleform {
+class flavours_deployment_form extends moodleform implements renderable {
 
     public function definition() {
 

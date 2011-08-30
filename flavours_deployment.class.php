@@ -44,7 +44,7 @@ class flavours_deployment extends flavours {
      * Initialization of the upload form
      */
     public function deployment_upload() {
-        $this->form = new flavours_deployment_upload_form($this->url);
+        $this->renderable = new flavours_deployment_upload_form($this->url);
     }
 
 
@@ -122,8 +122,8 @@ class flavours_deployment extends flavours {
         $customdata['treedata'] = $this->get_tree_ingredients();
         $customdata['flavourhash'] = $uniquename;
 
-        $this->form = new flavours_deployment_form($this->url, $customdata);
-        $this->form->set_data($toform);
+        $this->renderable = new flavours_deployment_form($this->url, $customdata);
+        $this->renderable->set_data($toform);
 
     }
 
@@ -136,7 +136,7 @@ class flavours_deployment extends flavours {
      * directory when finishes
      */
     public function deployment_execute() {
-        global $CFG, $OUTPUT;
+        global $CFG;
 
         $outputs = array();        // Deployment results
 
@@ -223,16 +223,12 @@ class flavours_deployment extends flavours {
                 $table->data[] = array($this->ingredients[$type]->name, $ingredientname, $feedback);
             }
         }
-        $this->output = html_writer::table($table);
+        
+        // Will be printed on the renderer
+        $this->renderable = new flavours_renderable_deployment_execute($table);
 
         // Finishing
         $this->unlink($flavourpath);
-
-        $notificationsurl = new moodle_url($CFG->wwwroot . '/admin/index.php');
-        $this->output .= '<div class="generalbox">';
-        $this->output .= $OUTPUT->single_button($notificationsurl,
-                                                get_string('deploymentcontinue', 'local_flavours'));
-        $this->output .= '</div>';
     }
 
 

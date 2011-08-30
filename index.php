@@ -27,6 +27,7 @@ require_once(dirname(__FILE__) . '/../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/local/flavours/flavours_packaging.class.php');
 require_once($CFG->dirroot . '/local/flavours/flavours_deployment.class.php');
+require_once($CFG->dirroot . '/local/flavours/locallib.php');
 
 $action = optional_param('action', 'packaging_form', PARAM_ALPHAEXT);
 
@@ -61,5 +62,4 @@ if (!method_exists($instance, $action)) {
 }
 $instance->$action();
 
-// Output
-$instance->display();
+echo $instance->render();

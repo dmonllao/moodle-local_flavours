@@ -23,3 +23,6 @@ INSTALL FROM A COMPRESSED FILE
 - Copy to local/ folder
 - Click 'Notifications' link on the frontpage administration blocks
 
+USAGE
+- Available through the frontpage Administration block -> Site settings -> Server -> Package a flavour & Deploy a flavour
+

@@ -174,7 +174,7 @@ abstract class flavours {
         global $PAGE;
 
         $renderer = $PAGE->get_renderer('local_flavours');
-        
+
         return $renderer->render_flavours_wrapper($this->renderable, $this->action);
     }
 

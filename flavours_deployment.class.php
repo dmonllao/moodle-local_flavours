@@ -223,7 +223,7 @@ class flavours_deployment extends flavours {
                 $table->data[] = array($this->ingredients[$type]->name, $ingredientname, $feedback);
             }
         }
-        
+
         // Will be printed on the renderer
         $this->renderable = new flavours_renderable_deployment_execute($table);
 

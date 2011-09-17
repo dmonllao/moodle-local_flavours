@@ -33,24 +33,24 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class flavours_renderable_deployment_execute implements renderable {
-	
-	protected $table;
 
-	
-	/**
-	 * Just a setter
-	 * @param html_table $table
-	 */
-	public function __construct(html_table $table) {
-		$this->table = $table;
-	}
-	
-	/**
-	 * $table getter
-	 * @return html_table
-	 */
-	public function get_table() {
-		return $this->table;
-	}
+    protected $table;
+
+
+    /**
+     * Just a setter
+     * @param html_table $table
+     */
+    public function __construct(html_table $table) {
+        $this->table = $table;
+    }
+
+    /**
+     * $table getter
+     * @return html_table
+     */
+    public function get_table() {
+        return $this->table;
+    }
 
 }

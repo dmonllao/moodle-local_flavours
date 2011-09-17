@@ -33,10 +33,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_flavours_renderer extends plugin_renderer_base {
-    
+
     /**
      * Wraps all the actions
-     * 
+     *
      * @param renderable $renderable
      * @param string $action
      * @return string
@@ -48,34 +48,34 @@ class local_flavours_renderer extends plugin_renderer_base {
         $PAGE->set_title(get_string('action' . $action, 'local_flavours'));
 
         $output = $this->output->header();
-        
+
         // Redirects the flow to the specific method
         $actiontorender = 'render_flavours_' . $action;
         $output .= $this->$actiontorender($renderable);
-        
+
         $output .= $this->output->footer();
-        
+
         return $output;
-        
+
     }
-    
+
     /**
      * Packaging form renderer
      * @param renderable $renderable
      */
-	protected function render_flavours_packaging_form(renderable $renderable) {
-		return $this->render_form($renderable);
-	}
-	
-	
-	/**
-	 * Not necessary, just to maintain coherence action -> render
-	 * @param renderable $renderable 
-	 */
-	protected function render_flavours_packaging_execute(renderable $renderable) {
+    protected function render_flavours_packaging_form(renderable $renderable) {
+        return $this->render_form($renderable);
+    }
+
+
+    /**
+     * Not necessary, just to maintain coherence action -> render
+     * @param renderable $renderable
+     */
+    protected function render_flavours_packaging_execute(renderable $renderable) {
         //
     }
-    
+
     /**
      * Deployment upload form renderer
      * @param renderable $renderable
@@ -83,7 +83,7 @@ class local_flavours_renderer extends plugin_renderer_base {
     protected function render_flavours_deployment_upload(renderable $renderable) {
         return $this->render_form($renderable);
     }
-    
+
     /**
      * Deployment preview form renderer
      * @param renderable $renderable
@@ -92,18 +92,18 @@ class local_flavours_renderer extends plugin_renderer_base {
         return $this->render_form($renderable);
     }
 
-    
+
     /**
      * Deployment results renderer
      * @param renderable $renderable
      */
     protected function render_flavours_deployment_execute(renderable $renderable) {
         global $CFG;
-        
-    	// The table with the results
-    	$output = html_writer::table($renderable->get_table());
-    	
-    	// The button to go to notifications
+
+        // The table with the results
+        $output = html_writer::table($renderable->get_table());
+
+        // The button to go to notifications
         $notificationsurl = new moodle_url($CFG->wwwroot . '/admin/index.php');
         $output .= '<div class="generalbox">';
         $output .= $this->output->single_button($notificationsurl,
@@ -112,21 +112,21 @@ class local_flavours_renderer extends plugin_renderer_base {
 
         return $output;
     }
-    
+
 
     /**
      * Gets the HTML of a moodle form
-     * 
+     *
      * @param moodleform $form
      * @return string The HTML of the form
      */
     protected function render_form(moodleform $form) {
-        
+
         ob_start();
-        
+
         $form->display();
         $output = ob_get_clean();
-        
+
         ob_end_clean();
 
         return $output;

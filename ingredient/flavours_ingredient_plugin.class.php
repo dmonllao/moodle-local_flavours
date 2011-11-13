@@ -323,6 +323,17 @@ class flavours_ingredient_plugin extends flavours_ingredient {
             }
         }
 
+        // Execute the moodle upgrade process
+        try {
+            foreach ($plugintypespaths as $type => $location) {
+                upgrade_plugins($type, 'print_upgrade_part_start', 'print_upgrade_part_end', false);
+            }
+        } catch (Exception $ex) {
+            abort_all_db_transactions();
+            $info = get_exception_info($ex);
+            upgrade_log(UPGRADE_LOG_ERROR, $ex->module, 'Exception: ' . get_class($ex), $info->message, $info->backtrace);
+        }
+    
         return $problems;
     }
 

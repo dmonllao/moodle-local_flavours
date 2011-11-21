@@ -24,6 +24,7 @@
  */
 
 require_once($CFG->dirroot . '/lib/pluginlib.php');
+require_once($CFG->dirroot . '/lib/upgradelib.php');
 require_once($CFG->dirroot . '/local/flavours/ingredient/flavours_ingredient.class.php');
 
 /**
@@ -326,7 +327,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         // Execute the moodle upgrade process
         try {
             foreach ($plugintypespaths as $type => $location) {
-                upgrade_plugins($type, 'print_upgrade_part_start', 'print_upgrade_part_end', false);
+                upgrade_plugins($type, 'flavours_print_upgrade_void', 'flavours_print_upgrade_void', false);
             }
         } catch (Exception $ex) {
             abort_all_db_transactions();

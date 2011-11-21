@@ -216,6 +216,8 @@ abstract class flavours {
             return false;
         }
 
+        ksort($ingredients);
+
         return $ingredients;
     }
 
@@ -333,4 +335,12 @@ abstract class flavours {
         }
         closedir($dir);
     }
+}
+
+
+/**
+ * Void function to pass to upgrade_plugins()
+ */
+function flavours_print_upgrade_void() {
+	return;
 }

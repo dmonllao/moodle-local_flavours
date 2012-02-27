@@ -140,9 +140,12 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                 $path . '/' . $this->id,
                 $plugintypepath);
 
-            if (!mkdir($plugintypeflavourpath, $CFG->directorypermissions, true)) {
-                debugging($plugintypeflavourpath);
-                continue;
+            // First condition to avoid subplugins conflicts
+            if (!is_dir($plugintypeflavourpath)) {
+                if (!mkdir($plugintypeflavourpath, $CFG->directorypermissions, true)) {
+                    debugging($plugintypeflavourpath);
+                    continue;
+                }
             }
 
             foreach ($ingredients as $ingredient) {
@@ -334,7 +337,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
             $info = get_exception_info($ex);
             upgrade_log(UPGRADE_LOG_ERROR, $ex->module, 'Exception: ' . get_class($ex), $info->message, $info->backtrace);
         }
-    
+
         return $problems;
     }
 

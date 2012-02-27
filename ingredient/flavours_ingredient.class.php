@@ -131,7 +131,9 @@ abstract class flavours_ingredient {
 
             if (!is_dir($to)) {
                 umask(0000);
-                $status = mkdir($to, $CFG->directorypermissions);
+                if (!is_dir($to)) {
+                    $status = mkdir($to, $CFG->directorypermissions);
+                }
             }
 
             $dir = opendir($from);

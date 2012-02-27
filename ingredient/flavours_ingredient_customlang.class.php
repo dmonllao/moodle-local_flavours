@@ -46,7 +46,7 @@ class flavours_ingredient_customlang extends flavours_ingredient_lang {
         $this->id = 'customlang';
         $this->name = get_string('localstringcustomization', 'admin');
 
-        $this->langpath = $CFG->dataroot . '/lang/';
+        $this->langpath = rtrim($CFG->langlocalroot, '/') . '/';
     }
 
 
@@ -62,11 +62,13 @@ class flavours_ingredient_customlang extends flavours_ingredient_lang {
         parent::get_system_info();
 
         // Remove the ones without local modifications
-        foreach ($this->branches as $langid => $data) {
+        if (!empty($this->branches)) {
+            foreach ($this->branches as $langid => $data) {
 
-            $customlangdir = $langid . '_local';
-            if (empty($customs[$customlangdir])) {
-                unset($this->branches[$langid]);
+                $customlangdir = $langid . '_local';
+                if (empty($customs[$customlangdir])) {
+                    unset($this->branches[$langid]);
+                }
             }
         }
 
@@ -107,6 +109,10 @@ class flavours_ingredient_customlang extends flavours_ingredient_lang {
         }
 
         $ingredients = $xml->children();
+        if (!$ingredients) {
+            return false;
+        }
+
         foreach ($ingredients as $lang => $langdata) {
 
             // Writable directory?
@@ -134,7 +140,6 @@ class flavours_ingredient_customlang extends flavours_ingredient_lang {
             $this->branches[$lang]->id = $lang;
             $this->branches[$lang]->name = $langdata->name;
         }
-
     }
 
 
@@ -158,8 +163,11 @@ class flavours_ingredient_customlang extends flavours_ingredient_lang {
 
         $customs = array();
 
+        if (!$dir = @opendir($this->langpath)) {
+            return false;
+        }
+
         // Iterate through the langs folder to get language customizations
-        $dir = opendir($this->langpath);
         while (false !== ($file = readdir($dir))) {
             if ($file == "." || $file == ".." || strstr($file, '_local') === false) {
                 continue;

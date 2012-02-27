@@ -125,7 +125,7 @@ class local_flavours_renderer extends plugin_renderer_base {
         ob_start();
 
         $form->display();
-        $output = ob_get_clean();
+        $output = ob_get_contents();
 
         ob_end_clean();
 

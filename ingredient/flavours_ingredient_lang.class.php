@@ -52,7 +52,7 @@ class flavours_ingredient_lang extends flavours_ingredient {
         $this->id = 'lang';
         $this->name = get_string('language');
 
-        $this->langpath = $CFG->dataroot . '/lang';
+        $this->langpath = rtrim($CFG->langotherroot, '/') . '/';
     }
 
 
@@ -137,6 +137,10 @@ class flavours_ingredient_lang extends flavours_ingredient {
         }
 
         $ingredients = $xml->children();
+        if (!$ingredients) {
+            return false;
+        }
+
         foreach ($ingredients as $lang => $langdata) {
 
             // Writable directory?

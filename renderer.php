@@ -115,6 +115,28 @@ class local_flavours_renderer extends plugin_renderer_base {
 
 
     /**
+     * Generate defaults.php file form renderer
+     * @param renderable $renderable
+     */
+    protected function render_flavours_generatedefaults_form(renderable $renderable) {
+        
+        // Info box + form
+        $html = $this->output->box(get_string('generatedefaultsinfo', 'local_flavours'));
+        $html .= $this->render_form($renderable);
+        return $html;
+    }
+    
+
+    /**
+     * Not necessary, just to maintain coherence action -> render
+     * @param renderable $renderable
+     */
+    protected function render_flavours_generatedefaults_execute(renderable $renderable) {
+        //
+    }
+
+    
+    /**
      * Gets the HTML of a moodle form
      *
      * @param moodleform $form

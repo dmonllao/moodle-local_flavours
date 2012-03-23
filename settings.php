@@ -36,3 +36,8 @@ $ADMIN->add('server', new admin_externalpage($flavoursplugin.'_deployment',
     get_string('deploy', $flavoursplugin),
     new moodle_url($flavoursurl . '&action=deployment_upload')));
 
+$ADMIN->add('server', new admin_externalpage($flavoursplugin.'_generatedefaults',
+    get_string('generatedefaults', $flavoursplugin),
+    new moodle_url($flavoursurl . '&action=generatedefaults_form')));
+
+    

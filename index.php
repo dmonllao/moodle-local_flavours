@@ -27,6 +27,7 @@ require_once(dirname(__FILE__) . '/../../config.php');
 require_once($CFG->libdir . '/adminlib.php');
 require_once($CFG->dirroot . '/local/flavours/flavours_packaging.class.php');
 require_once($CFG->dirroot . '/local/flavours/flavours_deployment.class.php');
+require_once($CFG->dirroot . '/local/flavours/flavours_generatedefaults.class.php');
 require_once($CFG->dirroot . '/local/flavours/lib.php');
 
 $action = optional_param('action', 'packaging_form', PARAM_ALPHAEXT);
@@ -46,11 +47,8 @@ $PAGE->set_url($url);
 $PAGE->set_context($context);
 
 // Calling the appropiate class
-if (strstr($action, 'packaging') != false) {
-    $classname = 'flavours_packaging';
-} else {
-    $classname = 'flavours_deployment';
-}
+$manager = substr($action, 0, strpos($action, '_'));
+$classname = 'flavours_' . $manager;
 $instance = new $classname($action);
 
 $actualsettingspage = array_shift(explode('_', $action));

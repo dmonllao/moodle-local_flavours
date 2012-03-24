@@ -225,6 +225,75 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
 
     /**
+     * Returns a 
+     * @todo Try to respect DRY and unify part of package_ingredients with settings_to_php
+     * @uses flavours_php_writer
+     * @param array $selectedsettings
+     * @returns array PHP code, one line per array element, the caller will make a string or a file
+     */
+    public function settings_to_php($selectedsettings) {
+
+        $phparray = array();
+        
+        $adminroot = & admin_get_root();
+        $this->get_branch_settings($adminroot->children, $this, true);
+
+        foreach ($selectedsettings as $settingspage) {
+
+            // Settings page path
+            $namespace = explode('/', $settingspage);
+
+            // The admin settingspage is the last one
+            $page = array_pop($namespace);
+
+            if (!$settings = $this->get_settingspage_settings($namespace, $page, $this)) {
+                continue;
+            }
+
+            $settingspagetagname = str_replace('/', '.', $settingspage);
+            
+            // Adding settings
+            foreach ($settings as $setting) {
+
+                // Can\'t refactor the whole 'core' code to 'moodle' to maintain 
+                // backward compatibility with flavours packages
+                if ($setting->plugin == 'core') {
+                    $setting->plugin = 'moodle';
+                }
+                
+                // Restore slashes
+                $setting->plugin = str_replace('.', '/', $setting->plugin);
+
+                // Valu with addslashes only in the single qoute
+                $value = $this->get_setting_value($setting->name, $setting->plugin);
+                $value = str_replace("'", "\'", $value);
+                
+                $phparray[] = '$defaults[\'' . $setting->plugin . '\'][\'' . $setting->name . '\'] = \'' . $value . '\';';
+
+                // TODO Do it!
+                // Getting the attributes of the tag
+                // Some plugins has slashes, not availables as part of the tag name
+//                $attrs = array('plugin' => str_replace('/', '.', $setting->plugin));
+//notify(print_r($attrs));
+//notify(print_r($setting->attrs));
+//                // Adding the extra values of the setting (if present) to the attributes array
+//                if (!empty($setting->attrs)) {
+//                    $attrs = array_merge($attrs, $setting->attrs);
+//                    $attrs['hasextra'] = '1';
+//                }
+
+//                $xmlwriter->full_tag($setting->name,
+//                    $this->get_setting_value($setting->name, $setting->plugin),
+//                    $attrs);
+            }
+            
+        }
+
+        return $phparray;
+    }
+    
+    
+    /**
      * Iterates through the moodle admin tree to extract the settings categories & pages hierarchy
      *
      * @param object $admintreebranch

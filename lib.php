@@ -54,3 +54,37 @@ class flavours_renderable_deployment_execute implements renderable {
     }
 
 }
+
+
+/**
+ * Simple class to pass info to the generatedefaults_execute renderer
+ */
+class flavours_renderable_generatedefaults_execute implements renderable {
+    
+    protected $info;
+    protected $phparray;
+    
+    /**
+     * Sets the instance attributes
+     * @param array $phparray
+     * @param object $info
+     */
+    public function __construct($phparray, $info = false) {
+        $this->phparray = $phparray;
+        $this->info = $info;
+    }
+    
+    /**
+     * phparray getter
+     */
+    public function get_phparray() {
+        return $this->phparray;
+    }
+    
+    /**
+     * info getter
+     */
+    public function get_info() {
+        return $this->info;
+    }
+}

@@ -41,20 +41,17 @@ class flavours_generatedefaults_form extends moodleform implements renderable {
 
         $mform = & $this->_form;
 
+        
+        // Warning overwrite
+        $mform->addElement('header', 'settings', get_string('defaultoverwritesoptions', 'local_flavours'));
+        $mform->addElement('checkbox', 'overwrite', get_string('defaultsoverwrite', 'local_flavours'));
+        
         // Settings
         $mform->addElement('header', 'ingredients',
-            get_string('selectingredients', 'local_flavours'));
+            get_string('selectsettings', 'local_flavours'));
         $mform->addElement('html', '<div id="id_ingredients_tree" class="ygtv-checkbox">'.
             $this->_customdata["treedata"].'</div>');
 
-        // Warning overwrite
-        if (!is_writable($CFG->dirroot . '/local/defaults.php')) {
-            $html = '<br/><span class="error">' .
-                get_string('warningdefaultsoverwritten', 'local_flavours') . '</span><br/><br/>';
-            $mform->addElement('html', $html);
-        }
-        
-        
         $mform->addElement('hidden', 'action', 'generatedefaults_execute');
         $mform->addElement('submit', 'ingredients_submit',
             get_string('generatedefaults', 'local_flavours'));

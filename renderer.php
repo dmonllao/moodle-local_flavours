@@ -48,7 +48,8 @@ class local_flavours_renderer extends plugin_renderer_base {
         $PAGE->set_title(get_string('action' . $action, 'local_flavours'));
 
         $output = $this->output->header();
-
+        $output .= $this->output->heading(get_string('action' . $action, 'local_flavours'));
+        
         // Redirects the flow to the specific method
         $actiontorender = 'render_flavours_' . $action;
         $output .= $this->$actiontorender($renderable);
@@ -121,18 +122,28 @@ class local_flavours_renderer extends plugin_renderer_base {
     protected function render_flavours_generatedefaults_form(renderable $renderable) {
         
         // Info box + form
-        $html = $this->output->box(get_string('generatedefaultsinfo', 'local_flavours'));
-        $html .= $this->render_form($renderable);
-        return $html;
+        $output = $this->output->box(get_string('generatedefaultsinfo', 'local_flavours'));
+        $output .= $this->render_form($renderable);
+        return $output;
     }
     
 
     /**
-     * Not necessary, just to maintain coherence action -> render
+     * To display the generated HTML
      * @param renderable $renderable
      */
     protected function render_flavours_generatedefaults_execute(renderable $renderable) {
-        //
+        
+        // Display info about the execution (was local/defaults.php overwritten?)
+        $class = 'generalbox ' . $renderable->get_info()->class;
+        $output = $this->output->box($renderable->get_info()->text, $class);
+        
+        // The php code to copy & paste
+        $userfriendlycode = '&lt;?php<br/><br/>';
+        $userfriendlycode .= implode('<br/>', $renderable->get_phparray()) . chr(10);
+        $output .= $this->output->box($userfriendlycode);
+        
+        return $output; 
     }
 
     

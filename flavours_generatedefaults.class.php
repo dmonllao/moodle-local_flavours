@@ -59,6 +59,8 @@ class flavours_generatedefaults extends flavours {
 
         global $USER, $CFG;
 
+        $overwrite = optional_param('overwrite', false, PARAM_INT);
+
         // Getting selected data
         $selectedingredients = $this->get_ingredients_from_form();
         if (!$selectedingredients) {
@@ -67,11 +69,40 @@ class flavours_generatedefaults extends flavours {
             redirect($url, get_string('nothingselected', 'local_flavours'), 2);
         }
         
-        die(print_r($selectedingredients));
-        if (is_writable($CFG->dirroot . '/local/defaults.php')) {
+        // Delegating to flavours_ingredient_setting
+        $settingingredient = $this->instance_ingredient_type('setting');
+        $phparray = $settingingredient->settings_to_php($selectedingredients['setting']);
+        
+        // Depending on the form checkbox
+        if ($overwrite) {
             
+	        // Try to write file
+	        $path = $CFG->dirroot . '/local';
+	        $file = $path .'/defaults.php';
+	        
+	        if (is_writable($path) && !file_exists($file) || 
+	            is_writable($file)) {
+	            
+	            $fh = fopen($file, 'w');
+	            fwrite($fh, '<?php' . chr(10) . chr(10));
+	            fwrite($fh, implode(chr(10), $phparray));
+	            fclose($fh);
+
+	            $info->text = get_string('defaultsfileoverwritten', 'local_flavours');
+	            $info->class = 'notifysuccess';
+	        } else {
+	            $info->class = 'notifyproblem';
+	            $info->text = get_string('errordefaultfilenotwritable', 'local_flavours');
+	        }
+	        
+	    // Add an info text to copy & paste
         } else {
-            
+            $info->text = get_string('copyandpastedefaults', 'local_flavours');
+            $info->class = '';
         }
+
+        // Sends the PHP code and the info about local/defaults.php to the rendere
+        $renderer = new flavours_renderable_generatedefaults_execute($phparray, $info);
+        $this->renderable = $renderer;
     }
 }

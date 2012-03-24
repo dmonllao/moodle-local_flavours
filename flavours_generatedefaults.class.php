@@ -43,7 +43,7 @@ class flavours_generatedefaults extends flavours {
         $PAGE->requires->js_init_call('M.local_flavours.init', null, true);
 
         // And rendering on dom ready
-        $PAGE->requires->js_init_call('M.local_flavours.render', null, true);
+        $PAGE->requires->js_init_call('M.local_flavours.render', array(true), true);
 
         // Fill the ingredients tree with this->ingredients (ondomready)
         $customdata['treedata'] = $this->get_tree_ingredients();

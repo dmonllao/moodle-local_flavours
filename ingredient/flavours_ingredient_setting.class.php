@@ -268,23 +268,14 @@ class flavours_ingredient_setting extends flavours_ingredient {
                 $value = $this->get_setting_value($setting->name, $setting->plugin);
                 $value = str_replace("'", "\'", $value);
                 
-                $phparray[] = '$defaults[\'' . $setting->plugin . '\'][\'' . $setting->name . '\'] = \'' . $value . '\';';
+                $phparray[] = $this->add_setting_php($setting->plugin, $setting->name, $value); 
 
-                // TODO Do it!
-                // Getting the attributes of the tag
-                // Some plugins has slashes, not availables as part of the tag name
-//                $attrs = array('plugin' => str_replace('/', '.', $setting->plugin));
-//notify(print_r($attrs));
-//notify(print_r($setting->attrs));
-//                // Adding the extra values of the setting (if present) to the attributes array
-//                if (!empty($setting->attrs)) {
-//                    $attrs = array_merge($attrs, $setting->attrs);
-//                    $attrs['hasextra'] = '1';
-//                }
-
-//                $xmlwriter->full_tag($setting->name,
-//                    $this->get_setting_value($setting->name, $setting->plugin),
-//                    $attrs);
+                // Adding the extra values of the setting (if present) to the attributes array
+                if (!empty($setting->attrs)) {
+                    foreach ($setting->attrs as $attrname => $value) {
+                        $phparray[] = $this->add_setting_php($setting->plugin, $attrname, $value);
+                    }
+                }
             }
             
         }
@@ -432,4 +423,16 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
     }
 
+    
+    /**
+     * Prepares a string in PHP representing a array[][] 
+     * @param string $plugin
+     * @param string $name
+     * @param mixed $value
+     * @return string The PHP to add to the list
+     */
+    protected function add_setting_php($plugin, $name, $value) {
+        return '$defaults[\'' . $plugin . '\'][\'' . $name . '\'] = \'' . $value . '\';';
+    }
+    
 }

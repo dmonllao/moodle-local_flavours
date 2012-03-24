@@ -140,8 +140,13 @@ class local_flavours_renderer extends plugin_renderer_base {
         
         // The php code to copy & paste
         $userfriendlycode = '&lt;?php<br/><br/>';
-        $userfriendlycode .= implode('<br/>', $renderable->get_phparray()) . chr(10);
-        $output .= $this->output->box($userfriendlycode);
+        $userfriendlycode .= implode('<br/>', $renderable->get_phparray());
+        $userfriendlycode .= '<br/><br/>';
+        $userfriendlycode .= '// It ends after this two comment lines, there is no php closing tag in this file,<br/>';
+        $userfriendlycode .= '// it is intentional because it prevents trailing whitespace problems!<br/><br/>';
+
+        
+        $output .= $this->output->box($userfriendlycode, 'configphp');
         
         return $output; 
     }

@@ -54,15 +54,23 @@ class flavours_generatedefaults extends flavours {
     
     /**
      * Displays / writes the PHP code
+     * @param boolean $overwrite Forces local/defaults.php to be overwritten
+     * @param array $selectedingredients Forces the selected ingredients
      */
-    public function generatedefaults_execute() {
+    public function generatedefaults_execute($overwrite = false, $selectedingredients = false) {
 
         global $USER, $CFG;
 
-        $overwrite = optional_param('overwrite', false, PARAM_INT);
+        // For cli execution
+        if (!$overwrite) { 
+            $overwrite = optional_param('overwrite', false, PARAM_INT);
+        }
 
         // Getting selected data
-        $selectedingredients = $this->get_ingredients_from_form();
+        // Second argument true when generating the settings from cli
+        if (!$selectedingredients) {
+            $selectedingredients = $this->get_ingredients_from_form();
+        }
         if (!$selectedingredients) {
             $url = $CFG->wwwroot . '/local/flavours/index.php?action=generatedefaults_form' . 
                    '&sesskey=' . sesskey();

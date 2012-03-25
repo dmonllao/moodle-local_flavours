@@ -435,4 +435,36 @@ class flavours_ingredient_setting extends flavours_ingredient {
         return '$defaults[\'' . $plugin . '\'][\'' . $name . '\'] = \'' . $value . '\';';
     }
     
+
+    /**
+     * Get all the branches nodes as form elements names
+     * 
+     * Used to force the selection of all the elements without a prev form selection
+     * Uses the same format get by flavours->get_ingredients_from_form()
+     * 
+     * @return array Array with all the settings
+     */
+    public function get_all_nodes($branches = false, $prefix = '', & $returnarray) {
+        
+        // Initialize the search
+        if (!$branches) {
+            $branches = $this->branches;
+        }
+        
+        foreach ($branches as $name => $branchdata) {
+            
+            // Iterate recursively
+	        if (!empty($branchdata->branches)) {
+	            $this->get_all_nodes($branchdata->branches, $prefix . $branchdata->id . '/', $returnarray);
+	            
+            // Then let's add it's children
+	        } else {
+                $settingkey = $prefix . $branchdata->id;
+                $returnarray['setting'][$settingkey] = $settingkey;
+	        }
+        }
+        
+        return $returnarray;
+    }
+    
 }

@@ -52,8 +52,12 @@ class flavours_ingredient_plugin extends flavours_ingredient {
      */
     public function get_system_info() {
 
-        // Moodle plugin manager and plugin types
+        // Load moodle plugins manager and get the plugins
         $pluginman = plugin_manager::instance();
+        $pluginman->get_plugins();
+        $pluginman->get_subplugins();
+        
+        // Getting the plugin types
         $plugintypes = get_plugin_types();
 
         foreach ($plugintypes as $type => $path) {

@@ -51,7 +51,8 @@ $manager = substr($action, 0, strpos($action, '_'));
 $classname = 'flavours_' . $manager;
 $instance = new $classname($action);
 
-$actualsettingspage = array_shift(explode('_', $action));
+$name = explode('_', $action);
+$actualsettingspage = array_shift($name);
 admin_externalpage_setup('local_flavours_'.$actualsettingspage);
 
 // Process the action

@@ -79,6 +79,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                         continue;
                     }
 
+                    $this->branches[$type]->branches[$pluginname] = new StdClass();
                     $this->branches[$type]->branches[$pluginname]->id = $pluginname;
 
                     // The plugin user friendly name

@@ -65,6 +65,7 @@ class flavours_ingredient_lang extends flavours_ingredient {
         if ($langs) {
             foreach ($langs as $lang => $langname) {
                 if ($lang != 'en') {
+                    $this->branches[$lang] = new StdClass();
                     $this->branches[$lang]->id = $lang;
                     $this->branches[$lang]->name = $langname;
                 }

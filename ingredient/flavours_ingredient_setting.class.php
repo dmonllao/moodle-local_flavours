@@ -70,7 +70,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
      * with the admin tree categories and pages
      */
     public function get_system_info() {
-        $adminroot = & admin_get_root();
+        $adminroot = admin_get_root();
         $this->get_branch_settings($adminroot->children, $this);
     }
 
@@ -299,6 +299,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
             if (is_a($child, 'admin_category')) {
 
                 if ($child->children) {
+                    $branch->branches[$child->name] = new StdClass();
                     $branch->branches[$child->name]->id = $child->name;
                     $branch->branches[$child->name]->name = $child->visiblename;
 
@@ -309,6 +310,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
             } else if (is_a($child, 'admin_settingpage') && $child->settings) {
                 // Adding the settings pages if we find settings
+                $branch->branches[$child->name] = new StdClass();
                 $branch->branches[$child->name]->id = $child->name;
                 $branch->branches[$child->name]->name = $child->visiblename;
 

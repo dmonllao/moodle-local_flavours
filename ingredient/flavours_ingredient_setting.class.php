@@ -200,7 +200,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
                 // Restoring the slashes removed on packaging
                 $plugin = str_replace('.', '/', $plugin);
 
-                set_config($settingname, $settingdata[0], $plugin);
+                set_config($settingname, (string)($settingdata[0]), $plugin);
 
                 // If it's a setting with multiple values set them
                 if (!empty($settingdata->attributes()->hasextra)) {

@@ -48,12 +48,13 @@ abstract class flavours {
 
         $this->action = $action;
         $this->url = $CFG->wwwroot.'/local/flavours/index.php';
-        $this->flavourstmpfolder = $CFG->dataroot.'/temp/flavours';
+        $this->flavourstmpfolder = $CFG->tempdir.'/flavours';
+
+        // Temp directory may be absent on fresh installs
+        @mkdir ($CFG->tempdir.'/');
 
         // Ensure that the flavours temp folder exists
-        if (!file_exists($this->flavourstmpfolder)) {
-            mkdir($this->flavourstmpfolder, $CFG->directorypermissions);
-        }
+        @mkdir ($this->flavourstmpfolder);
 
         // Clean garbage caused by the packaging system or workflow exceptions
         $this->clean_garbage();
@@ -266,7 +267,9 @@ abstract class flavours {
             $status = @unlink($path);
 
         } else {
-            $dir = opendir($path);
+            if (!$dir = opendir($path)) {
+                return false;
+            }
             while (false !== ($file = readdir($dir))) {
                 if ($file == "." || $file == "..") {
                     continue;
@@ -318,15 +321,15 @@ abstract class flavours {
         $olderthan = 3600;   // One hour
         $now = time();
 
-        $path = $CFG->dataroot . '/temp/flavours';
-
-        $dir = opendir($path);
+        if (!$dir = opendir($this->flavourstmpfolder)) {
+            return;
+        }
         while (false !== ($file = readdir($dir))) {
             if ($file == "." || $file == "..") {
                 continue;
             }
 
-            $filepath = $path . '/' . $file;
+            $filepath = $this->flavourstmpfolder . '/' . $file;
 
             // If it's older than $olderthan remove it
             if ($now > (filemtime($filepath) + $olderthan)) {

@@ -56,7 +56,7 @@ abstract class flavours {
         }
 
         // Ensure that the flavours temp folder exists
-        if (!file_exists($CFG->flavourstmpfolder)) {
+        if (!file_exists($this->flavourstmpfolder)) {
             @mkdir ($this->flavourstmpfolder, $CFG->directorypermissions);
         }
 

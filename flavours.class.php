@@ -51,10 +51,14 @@ abstract class flavours {
         $this->flavourstmpfolder = $CFG->tempdir.'/flavours';
 
         // Temp directory may be absent on fresh installs
-        @mkdir ($CFG->tempdir.'/');
+        if (!file_exists($CFG->tempdir)) {
+            @mkdir ($CFG->tempdir . '/', $CFG->directorypermissions);
+        }
 
         // Ensure that the flavours temp folder exists
-        @mkdir ($this->flavourstmpfolder);
+        if (!file_exists($CFG->flavourstmpfolder)) {
+            @mkdir ($this->flavourstmpfolder, $CFG->directorypermissions);
+        }
 
         // Clean garbage caused by the packaging system or workflow exceptions
         $this->clean_garbage();

@@ -138,7 +138,7 @@ class flavours_ingredient_customlang extends flavours_ingredient_lang {
             }
 
             $this->branches[$lang]->id = $lang;
-            $this->branches[$lang]->name = $langdata->name;
+            $this->branches[$lang]->name = (String) $langdata->name;
         }
     }
 

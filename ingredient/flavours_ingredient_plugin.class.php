@@ -56,7 +56,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         $pluginman = plugin_manager::instance();
         $pluginman->get_plugins();
         $pluginman->get_subplugins();
-        
+
         // Getting the plugin types
         $plugintypes = get_plugin_types();
 
@@ -230,6 +230,9 @@ class flavours_ingredient_plugin extends flavours_ingredient {
 
                     $systemplugin = $systemplugins[$plugintype][$pluginname];
 
+                    $pluginversiondisk = (String) $plugindata->versiondisk;
+                    $pluginrequires = (String) $plugindata->requires;
+
                     // Overwrite disabled
                     if (!empty($systemplugin) && !$overwrite) {
                         $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginalreadyinstalled'] = $pluginfull;
@@ -237,21 +240,22 @@ class flavours_ingredient_plugin extends flavours_ingredient {
 
                     // If the flavour plugin doesn't have a versiondisk (filters for example)
                     // don't overwrite (and skip notification if the upper one has been displayed
-                    if (empty($plugindata->versiondisk) &&
+                    if (empty($pluginversiondisk) &&
                         empty($this->branches[$plugintype]->branches[$pluginname]->restrictions)) {
                         $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginnoversiondiskupgrade'] = $pluginfull;
                     }
 
                     // Overwrite if newer release on flavour
-                    if (!empty($systemplugin) && $overwrite && !empty($plugindata->versiondisk) &&
-                       $plugindata->versiondisk <= $systemplugin->versiondisk) {
+                    if (!empty($systemplugin) && $overwrite && !empty($pluginversiondisk) &&
+                        $pluginversiondisk <= $systemplugin->versiondisk) {
+
                         $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginflavournotnewer'] = $pluginfull;
                     }
 
                 }
 
                 // Required Moodle version to use the plugin
-                if (!empty($plugindata->requires) && $CFG->version < $plugindata->requires) {
+                if (!empty($pluginrequires) && $CFG->version < $pluginrequires) {
                     $this->branches[$plugintype]->branches[$pluginname]->restrictions['pluginsystemold'] = $pluginfull;
                 }
 

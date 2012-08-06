@@ -188,7 +188,8 @@ class flavours_ingredient_setting extends flavours_ingredient {
             $settingsproblemsarray = array();
             foreach ($pagesettings as $settingname => $settingdata) {
 
-                if (!$plugin = $settingdata->attributes()->plugin) {
+                $plugin = (String) $settingdata->attributes()->plugin;
+                if (!$plugin) {
                     $settingsproblemsarray[$ingredient][] = $settingname;
                     continue;
                 }
@@ -200,13 +201,14 @@ class flavours_ingredient_setting extends flavours_ingredient {
                 // Restoring the slashes removed on packaging
                 $plugin = str_replace('.', '/', $plugin);
 
-                set_config($settingname, $settingdata[0], $plugin);
+                set_config($settingname, (String) $settingdata[0], $plugin);
 
                 // If it's a setting with multiple values set them
                 if (!empty($settingdata->attributes()->hasextra)) {
                     $attrs = $settingdata->attributes()->hasextra;
                     foreach ($attrs as $key => $value) {
 
+                        $value = (String) $value;
                         if ($key != 'hasextra' && $key != 'plugin') {
                             set_config($key, $value, $plugin);
                         }
@@ -225,7 +227,8 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
 
     /**
-     * Returns a 
+     * Gets a string with PHP code to inject default values to the upgrade processes
+     *
      * @todo Try to respect DRY and unify part of package_ingredients with settings_to_php
      * @uses flavours_php_writer
      * @param array $selectedsettings
@@ -234,7 +237,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
     public function settings_to_php($selectedsettings) {
 
         $phparray = array();
-        
+
         $adminroot = & admin_get_root();
         $this->get_branch_settings($adminroot->children, $this, true);
 
@@ -251,24 +254,24 @@ class flavours_ingredient_setting extends flavours_ingredient {
             }
 
             $settingspagetagname = str_replace('/', '.', $settingspage);
-            
+
             // Adding settings
             foreach ($settings as $setting) {
 
-                // Can\'t refactor the whole 'core' code to 'moodle' to maintain 
+                // Can\'t refactor the whole 'core' code to 'moodle' to maintain
                 // backward compatibility with flavours packages
                 if ($setting->plugin == 'core') {
                     $setting->plugin = 'moodle';
                 }
-                
+
                 // Restore slashes
                 $setting->plugin = str_replace('.', '/', $setting->plugin);
 
                 // Valu with addslashes only in the single qoute
                 $value = $this->get_setting_value($setting->name, $setting->plugin);
                 $value = str_replace("'", "\'", $value);
-                
-                $phparray[] = $this->add_setting_php($setting->plugin, $setting->name, $value); 
+
+                $phparray[] = $this->add_setting_php($setting->plugin, $setting->name, $value);
 
                 // Adding the extra values of the setting (if present) to the attributes array
                 if (!empty($setting->attrs)) {
@@ -277,13 +280,13 @@ class flavours_ingredient_setting extends flavours_ingredient {
                     }
                 }
             }
-            
+
         }
 
         return $phparray;
     }
-    
-    
+
+
     /**
      * Iterates through the moodle admin tree to extract the settings categories & pages hierarchy
      *
@@ -425,9 +428,9 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
     }
 
-    
+
     /**
-     * Prepares a string in PHP representing a array[][] 
+     * Prepares a string in PHP representing a array[][]
      * @param string $plugin
      * @param string $name
      * @param mixed $value
@@ -436,37 +439,37 @@ class flavours_ingredient_setting extends flavours_ingredient {
     protected function add_setting_php($plugin, $name, $value) {
         return '$defaults[\'' . $plugin . '\'][\'' . $name . '\'] = \'' . $value . '\';';
     }
-    
+
 
     /**
      * Get all the branches nodes as form elements names
-     * 
+     *
      * Used to force the selection of all the elements without a prev form selection
      * Uses the same format get by flavours->get_ingredients_from_form()
-     * 
+     *
      * @return array Array with all the settings
      */
     public function get_all_nodes($branches = false, $prefix = '', & $returnarray) {
-        
+
         // Initialize the search
         if (!$branches) {
             $branches = $this->branches;
         }
-        
+
         foreach ($branches as $name => $branchdata) {
-            
+
             // Iterate recursively
 	        if (!empty($branchdata->branches)) {
 	            $this->get_all_nodes($branchdata->branches, $prefix . $branchdata->id . '/', $returnarray);
-	            
+
             // Then let's add it's children
 	        } else {
                 $settingkey = $prefix . $branchdata->id;
                 $returnarray['setting'][$settingkey] = $settingkey;
 	        }
         }
-        
+
         return $returnarray;
     }
-    
+
 }

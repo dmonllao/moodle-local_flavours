@@ -88,7 +88,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
             return false;
         }
 
-        $adminroot = & admin_get_root();
+        $adminroot = admin_get_root();
         $this->get_branch_settings($adminroot->children, $this, true);
 
         foreach ($ingredientsdata as $settingspage) {
@@ -141,7 +141,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
         // Getting all the system settings to verify the available settings pages and to
         // get the real visiblename of the flavour settings pages and settings categories
-        $adminroot = & admin_get_root();
+        $adminroot = admin_get_root();
         $this->get_branch_settings($adminroot->children, $systemsettings);
 
         foreach ($xml as $namespace => $settings) {
@@ -238,7 +238,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
         $phparray = array();
 
-        $adminroot = & admin_get_root();
+        $adminroot = admin_get_root();
         $this->get_branch_settings($adminroot->children, $this, true);
 
         foreach ($selectedsettings as $settingspage) {
@@ -321,6 +321,8 @@ class flavours_ingredient_setting extends flavours_ingredient {
                 if ($addsettings && !empty($child->settings)) {
                     foreach ($child->settings as $settingname => $setting) {
 
+                        $branch->branches[$child->name]->settings[$settingname] = new stdClass();
+
                         if ($setting->plugin == '') {
                             $branch->branches[$child->name]->settings[$settingname]->plugin = 'core';
                         } else {
@@ -402,6 +404,7 @@ class flavours_ingredient_setting extends flavours_ingredient {
     protected function get_flavour_branches($treepath, &$branch, $systemsettings) {
 
         $node = array_shift($treepath);
+        $branch[$node] = new stdClass();
         $branch[$node]->id = $node;
 
         // Checking the existence of the settingpage on this moodle release

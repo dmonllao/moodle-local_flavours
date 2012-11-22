@@ -13,7 +13,7 @@ M.local_flavours = {
 
             var context = M.local_flavours;
 
-            context.tree = new YAHOO.widget.TreeView("id_ingredients_tree");
+            context.tree = new Y.YUI2.widget.TreeView("id_ingredients_tree");
 
             context.nodes = new Array();
             context.nodes['root'] = context.tree.getRoot();
@@ -40,7 +40,7 @@ M.local_flavours = {
             // And uncheck the ones with restrictions (the user will be able to check again)
             // In a happy world I would set an <a> attribute, something like 'checked'
             var nodes = context.tree.getNodesByProperty('highlightState', '1');  // All
-            if (!YAHOO.lang.isNull(nodes)) {
+            if (!Y.YUI2.lang.isNull(nodes)) {
                 for (var i = 0; i < nodes.length; i++) {
                 	if (nodes[i].target != '_self' && nodes[i].title == undefined) {
                         nodes[i].toggleHighlight();
@@ -52,7 +52,7 @@ M.local_flavours = {
         }
 
         // Listener to create one node for each selected setting
-        YAHOO.util.Event.on('id_ingredients_submit', 'click', function() {
+        Y.YUI2.util.Event.on('id_ingredients_submit', 'click', function() {
 
             // We need the moodle form to add the checked settings
             var FlavoursForm = document.getElementById('mform1');
@@ -64,8 +64,8 @@ M.local_flavours = {
 
             // Only the highlighted nodes
             var hiLit = context.tree.getNodesByProperty('highlightState', 1);
-            if (YAHOO.lang.isNull(hiLit)) {
-                YAHOO.log("Nothing selected");
+            if (Y.YUI2.lang.isNull(hiLit)) {
+                Y.YUI2.log("Nothing selected");
 
             } else {
 

@@ -220,7 +220,12 @@ class flavours_ingredient_plugin extends flavours_ingredient {
                 $nowritable = true;
             }
 
+            $this->branches[$plugintype] = new stdClass();
+
             foreach ($plugins as $pluginname => $plugindata) {
+
+
+                $this->branches[$plugintype]->branches[$pluginname] = new stdClass();
 
                 // Only to display on notifications
                 $pluginfull = $plugintype . '/' . $pluginname;

@@ -124,16 +124,14 @@ abstract class flavours {
                     if (!empty($data->restrictions)) {
 
                         // A way to mark which ones have restrictions to work with TreeView
-                        $title = '';
-
-                        $string .= ' <span class="error">';
+                        $string = '<span class="error treenode">' . $string . ' - ';
                         $string .= $this->get_restrictions_string($data->restrictions);
                         $string .= '</span>';
+                    } else {
+                        $string = '<a class="treenode" target="' . $branchprefix . '" title="' . $title . '">' . $string . '</a>';
                     }
 
-                    $output .= '<li><a target="' . $branchprefix . '" title="' . $title . '">' .
-                               $string .
-                               '</a></li>';
+                    $output .= '<li>' . $string . '</li>';
 
                 } else {
                     // Let's get the branch children

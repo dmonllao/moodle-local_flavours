@@ -113,6 +113,7 @@ abstract class flavours {
 
                 // To identify that branch/leaf and pass it through his branches
                 $branchprefix = $prefix.'/'.$data->id;
+                $branchnodeprefix = 'node_' . $branchprefix;
 
                 // If it does not have children it's a leaf
                 if (empty($data->branches)) {
@@ -124,11 +125,13 @@ abstract class flavours {
                     if (!empty($data->restrictions)) {
 
                         // A way to mark which ones have restrictions to work with TreeView
-                        $string = '<span class="error treenode">' . $string . ' - ';
+                        $title = '';
+
+                        $string = '<span alt="'.$branchnodeprefix.'" class="error treenode">' . $string . ' - ';
                         $string .= $this->get_restrictions_string($data->restrictions);
                         $string .= '</span>';
                     } else {
-                        $string = '<a class="treenode" target="' . $branchprefix . '" title="' . $title . '">' . $string . '</a>';
+                        $string = '<a alt="'.$branchnodeprefix.'" class="treenode" title="' . $title . '">' . $string . '</a>';
                     }
 
                     $output .= '<li>' . $string . '</li>';

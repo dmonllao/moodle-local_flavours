@@ -71,17 +71,18 @@ M.local_flavours = {
 
                 for (var i = 0; i < hiLit.length; i++) {
 
-                    treeNode = hiLit[i];
+                    var treeNode = Y.Node.create(hiLit[i].getContentHtml());
+                    var nodeId = treeNode.getAttribute('alt').substr(5);
 
                     // The way to identify a ingredient (ingredients branches not allowed)
-                    if (treeNode.target != 'undefined' && treeNode.target != '') {
+                    if (nodeId != 'undefined' && nodeId != '') {
 
                         // If the node does not exists we add it
-                        if (!document.getElementById(treeNode.target)) {
+                        if (!document.getElementById(nodeId)) {
 
                             var ingredientelement = document.createElement('input');
                             ingredientelement.setAttribute('type', 'hidden');
-                            ingredientelement.setAttribute('name', treeNode.target);
+                            ingredientelement.setAttribute('name', nodeId);
                             ingredientelement.setAttribute('value', '1');
                             FlavoursForm.appendChild(ingredientelement);
                         }

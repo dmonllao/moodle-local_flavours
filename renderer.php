@@ -49,7 +49,7 @@ class local_flavours_renderer extends plugin_renderer_base {
 
         $output = $this->output->header();
         $output .= $this->output->heading(get_string('action' . $action, 'local_flavours'));
-        
+
         // Redirects the flow to the specific method
         $actiontorender = 'render_flavours_' . $action;
         $output .= $this->$actiontorender($renderable);
@@ -106,10 +106,8 @@ class local_flavours_renderer extends plugin_renderer_base {
 
         // The button to go to notifications
         $notificationsurl = new moodle_url($CFG->wwwroot . '/admin/index.php');
-        $output .= '<div class="generalbox">';
         $output .= $this->output->single_button($notificationsurl,
-                                                get_string('deploymentcontinue', 'local_flavours'));
-        $output .= '</div>';
+            get_string('deploymentcontinue', 'local_flavours'));
 
         return $output;
     }
@@ -120,24 +118,24 @@ class local_flavours_renderer extends plugin_renderer_base {
      * @param renderable $renderable
      */
     protected function render_flavours_generatedefaults_form(renderable $renderable) {
-        
+
         // Info box + form
         $output = $this->output->box(get_string('generatedefaultsinfo', 'local_flavours'));
         $output .= $this->render_form($renderable);
         return $output;
     }
-    
+
 
     /**
      * To display the generated HTML
      * @param renderable $renderable
      */
     protected function render_flavours_generatedefaults_execute(renderable $renderable) {
-        
+
         // Display info about the execution (was local/defaults.php overwritten?)
         $class = 'generalbox ' . $renderable->get_info()->class;
         $output = $this->output->box($renderable->get_info()->text, $class);
-        
+
         // The php code to copy & paste
         $userfriendlycode = '&lt;?php<br/><br/>';
         $userfriendlycode .= implode('<br/>', $renderable->get_phparray());
@@ -145,13 +143,13 @@ class local_flavours_renderer extends plugin_renderer_base {
         $userfriendlycode .= '// It ends after this two comment lines, there is no php closing tag in this file,<br/>';
         $userfriendlycode .= '// it is intentional because it prevents trailing whitespace problems!<br/><br/>';
 
-        
+
         $output .= $this->output->box($userfriendlycode, 'configphp');
-        
-        return $output; 
+
+        return $output;
     }
 
-    
+
     /**
      * Gets the HTML of a moodle form
      *

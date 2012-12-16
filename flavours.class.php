@@ -131,7 +131,7 @@ abstract class flavours {
                         $string .= $this->get_restrictions_string($data->restrictions);
                         $string .= '</span>';
                     } else {
-                        $string = '<a alt="'.$branchnodeprefix.'" class="treenode" title="' . $title . '">' . $string . '</a>';
+                        $string = '<span alt="'.$branchnodeprefix.'" class="treenode" title="' . $title . '">' . $string . '</span>';
                     }
 
                     $output .= '<li>' . $string . '</li>';

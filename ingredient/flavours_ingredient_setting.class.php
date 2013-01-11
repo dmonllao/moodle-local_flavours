@@ -404,7 +404,10 @@ class flavours_ingredient_setting extends flavours_ingredient {
     protected function get_flavour_branches($treepath, &$branch, $systemsettings) {
 
         $node = array_shift($treepath);
-        $branch[$node] = new stdClass();
+
+        if (empty($branch[$node])) {
+            $branch[$node] = new stdClass();
+        }
         $branch[$node]->id = $node;
 
         // Checking the existence of the settingpage on this moodle release

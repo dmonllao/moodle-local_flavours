@@ -27,8 +27,8 @@ defined('MOODLE_INTERNAL') || die;
 
 $plugin->component = 'local_flavours';
 
-$plugin->version  = 2015112700;
-$plugin->requires = 2014041100;
+$plugin->version  = 2015112800;
+$plugin->requires = 2014101000;
 
 $plugin->maturity = MATURITY_RC;
-$plugin->release = '27.0 (Build: 2015112700)';
+$plugin->release = '28.0 (Build: 2015112800)';

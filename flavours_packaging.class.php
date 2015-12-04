@@ -145,16 +145,12 @@ class flavours_packaging extends flavours {
 
         // Flavour contents compression
         $packer = new zip_packer();
-        $zipfilepath = $this->flavourstmpfolder .
-            '/' . $hash . '/flavour_' . date('Y-m-d') . '.zip';
+        $zipfilename = clean_param('flavour_' . userdate(time(), get_string('backupnameformat', 'langconfig')) . '.zip', PARAM_FILE);
+        $zipfilepath = $this->flavourstmpfolder . DIRECTORY_SEPARATOR . $zipfilename;
+
         if (!$packer->archive_to_pathname(array('flavour' => $flavourpath), $zipfilepath)) {
             print_error('errorpackaging', 'local_flavours');
         }
-
-        session_get_instance()->write_close();
-        send_file($zipfilepath, basename($zipfilepath));
-
-        // To avoid the html headers and all the print* stuff
-        die();
+        send_file($zipfilepath, $zipfilename);
     }
 }

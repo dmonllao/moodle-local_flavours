@@ -93,4 +93,5 @@ $string['selectfile'] = 'Select file';
 $string['selectingredients'] = 'Select ingredients';
 $string['selectingredientstodeploy'] = 'Select ingredients to deploy';
 $string['selectsettings'] = 'Select settings';
+$string['settingswarning'] = 'Please, note that \'Settings\' ingredient is not reliable and may lead to unexpected results. Consider using <a href="https://moodle.org/plugins/block_admin_presets" target="_blank">https://moodle.org/plugins/block_admin_presets</a> to import/export site settings.';
 $string['warning'] = 'Warning!';

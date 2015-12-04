@@ -37,7 +37,7 @@ class flavours_packaging_form extends moodleform implements renderable {
 
     public function definition() {
 
-        global $USER;
+        global $USER, $OUTPUT;
 
         $mform = & $this->_form;
 
@@ -60,10 +60,16 @@ class flavours_packaging_form extends moodleform implements renderable {
         // Ingredients
         $mform->addElement('header', 'ingredients',
             get_string('selectingredients', 'local_flavours'));
+
+        // Warning about settings.
+        $mform->addElement('html', $OUTPUT->notification(get_string('settingswarning', 'local_flavours')));
+
         $mform->addElement('html', '<div id="id_ingredients_tree" class="ygtv-checkbox">'.
             $this->_customdata["treedata"].'</div>');
 
         $mform->addElement('hidden', 'action', 'packaging_execute');
+        $mform->setType('action', PARAM_ALPHAEXT);
+
         $mform->addElement('submit', 'ingredients_submit',
             get_string('packageflavour', 'local_flavours'));
     }

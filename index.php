@@ -32,14 +32,13 @@ require_once($CFG->dirroot . '/local/flavours/lib.php');
 
 $action = optional_param('action', 'packaging_form', PARAM_ALPHAEXT);
 
+$context = context_system::instance();
+
 // Access control
-require_login();
-require_capability('moodle/site:config', get_context_instance(CONTEXT_SYSTEM));
+require_capability('moodle/site:config', $context);
 if (!confirm_sesskey()) {
     print_error('confirmsesskeybad', 'error');
 }
-
-$context = get_context_instance(CONTEXT_SYSTEM);
 
 $url = new moodle_url('/local/flavours/index.php');
 $url->param('action', $action);

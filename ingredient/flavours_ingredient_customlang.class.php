@@ -79,6 +79,7 @@ class flavours_ingredient_customlang extends flavours_ingredient_lang {
             // To obtain the name
             $string = get_string_manager()->load_component_strings('langconfig', $id);
 
+            $this->branches[$id] = new stdClass();
             $this->branches[$id]->id = $id;
             $this->branches[$id]->name = $string['thislanguage'] . ' ('. $id .')';
         }
@@ -114,6 +115,8 @@ class flavours_ingredient_customlang extends flavours_ingredient_lang {
         }
 
         foreach ($ingredients as $lang => $langdata) {
+
+            $this->branches[$lang] = new stdClass();
 
             // Writable directory?
             if (!empty($nowritable)) {

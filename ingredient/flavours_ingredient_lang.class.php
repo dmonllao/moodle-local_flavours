@@ -132,8 +132,7 @@ class flavours_ingredient_lang extends flavours_ingredient {
         $alllangs = get_string_manager()->get_list_of_languages();
 
         // File permissions
-        $langsfolder = $CFG->dataroot.'/lang/';
-        if (!is_writable($langsfolder)) {
+        if (!file_exists($this->langpath) || !is_writable($this->langpath)) {
             $nowritable = true;
         }
 
@@ -144,9 +143,11 @@ class flavours_ingredient_lang extends flavours_ingredient {
 
         foreach ($ingredients as $lang => $langdata) {
 
+            $this->branches[$lang] = new stdClass();
+
             // Writable directory?
             if (!empty($nowritable)) {
-                $this->branches[$lang]->restrictions['langfilepermissions'] = $langsfolder;
+                $this->branches[$lang]->restrictions['langfilepermissions'] = $this->langpath;
             }
 
             // Installed language?

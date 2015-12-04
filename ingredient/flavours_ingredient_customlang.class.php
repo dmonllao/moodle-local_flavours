@@ -47,6 +47,8 @@ class flavours_ingredient_customlang extends flavours_ingredient_lang {
         $this->name = get_string('localstringcustomization', 'admin');
 
         $this->langpath = rtrim($CFG->langlocalroot, '/') . '/';
+
+        $this->check_lang_dir();
     }
 
 

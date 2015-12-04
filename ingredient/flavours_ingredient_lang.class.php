@@ -53,6 +53,8 @@ class flavours_ingredient_lang extends flavours_ingredient {
         $this->name = get_string('language');
 
         $this->langpath = rtrim($CFG->langotherroot, '/') . '/';
+
+        $this->check_lang_dir();
     }
 
 
@@ -216,5 +218,20 @@ class flavours_ingredient_lang extends flavours_ingredient {
      */
     protected function get_lang_dir($langid) {
         return $langid;
+    }
+
+    /**
+     * Checks if the lang dir in moodledata exists and tries to create it if it does not.
+     *
+     * @return void
+     */
+    protected function check_lang_dir() {
+        global $CFG;
+
+        // Try to create it if it does not exist, should be created during install though.
+        // If we can't we will later show a nice problem to the user, no need for an exception.
+        if (!file_exists($this->langpath)) {
+            @mkdir($this->langpath, $CFG->directorypermissions, true);
+        }
     }
 }

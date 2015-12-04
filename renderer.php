@@ -107,7 +107,7 @@ class local_flavours_renderer extends plugin_renderer_base {
         // The button to go to notifications
         $notificationsurl = new moodle_url($CFG->wwwroot . '/admin/index.php');
         $output .= $this->output->single_button($notificationsurl,
-            get_string('deploymentcontinue', 'local_flavours'));
+            get_string('deploymentcontinue', 'local_flavours'), 'get');
 
         return $output;
     }

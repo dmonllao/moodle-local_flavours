@@ -99,7 +99,9 @@ class flavours_packaging extends flavours {
         $xmlwriter->start();
         $xmlwriter->begin_tag('flavour');
         $xmlwriter->full_tag('name', $data->name);
-        $xmlwriter->full_tag('description', $data->description);
+        // Ignoring the format, the received description format should be included
+        // in the package to display it properly.
+        $xmlwriter->full_tag('description', $data->description['text']);
         $xmlwriter->full_tag('author', $data->author);
         $xmlwriter->full_tag('timecreated', time());
         $xmlwriter->full_tag('sourceurl', $CFG->wwwroot);

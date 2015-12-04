@@ -23,9 +23,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once($CFG->dirroot . '/lib/pluginlib.php');
-require_once($CFG->dirroot . '/lib/upgradelib.php');
 require_once($CFG->dirroot . '/local/flavours/ingredient/flavours_ingredient.class.php');
+require_once($CFG->dirroot . '/lib/upgradelib.php');
 
 /**
  * Manages the packaging and deployment of all the moodle plugins
@@ -53,7 +52,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
     public function get_system_info() {
 
         // Load moodle plugins manager and get the plugins
-        $pluginman = plugin_manager::instance();
+        $pluginman = core_plugin_manager::instance();
         $pluginman->get_plugins();
         $pluginman->get_subplugins();
 
@@ -122,7 +121,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         $plugintypesdata = get_plugin_types();
 
         // To find the plugins versions
-        $pluginman = plugin_manager::instance();
+        $pluginman = core_plugin_manager::instance();
         $systemplugins = $pluginman->get_plugins(true);
 
         mkdir($path . '/' . $this->id, $CFG->directorypermissions);
@@ -205,7 +204,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
 
         $overwrite = required_param('overwrite', PARAM_INT);
 
-        $pluginman = plugin_manager::instance();
+        $pluginman = core_plugin_manager::instance();
         $systemplugins = $pluginman->get_plugins();
         $plugintypespaths = get_plugin_types();
 
@@ -291,7 +290,7 @@ class flavours_ingredient_plugin extends flavours_ingredient {
         // Using the $ingredients array keys to maintain coherence with the main deployment method
         $problems = array();
 
-        $pluginman = plugin_manager::instance();
+        $pluginman = core_plugin_manager::instance();
         $plugintypespaths = get_plugin_types();
 
         $this->get_flavour_info($xml);

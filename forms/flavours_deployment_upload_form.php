@@ -56,6 +56,7 @@ class flavours_deployment_upload_form extends moodleform implements renderable {
         $mform->setType('overwrite', PARAM_INT);
 
         $mform->addElement('hidden', 'action', 'deployment_preview');
+        $mform->setType('action', PARAM_ALPHAEXT);
         $mform->addElement('submit', 'deployment_upload_submit', get_string('next'));
     }
 }

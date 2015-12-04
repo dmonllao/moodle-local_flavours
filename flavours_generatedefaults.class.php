@@ -28,7 +28,7 @@ require_once($CFG->dirroot . '/local/flavours/forms/flavours_generatedefaults_fo
 
 class flavours_generatedefaults extends flavours {
 
-    
+
     /**
      * Allows users to select which settings will be saved
      */
@@ -38,7 +38,7 @@ class flavours_generatedefaults extends flavours {
 
         $this->ingredients['setting'] = $this->instance_ingredient_type('setting');
         $this->ingredients['setting']->get_system_info();
-        
+
         // Initializing the tree
         $PAGE->requires->js_init_call('M.local_flavours.init', null, true);
 
@@ -50,8 +50,8 @@ class flavours_generatedefaults extends flavours {
 
         $this->renderable = new flavours_generatedefaults_form($this->url, $customdata);
     }
-    
-    
+
+
     /**
      * Displays / writes the PHP code
      * @param boolean $overwrite Forces local/defaults.php to be overwritten
@@ -62,7 +62,7 @@ class flavours_generatedefaults extends flavours {
         global $USER, $CFG;
 
         // For cli execution
-        if (!$overwrite) { 
+        if (!$overwrite) {
             $overwrite = optional_param('overwrite', false, PARAM_INT);
         }
 
@@ -72,37 +72,38 @@ class flavours_generatedefaults extends flavours {
             $selectedingredients = $this->get_ingredients_from_form();
         }
         if (!$selectedingredients) {
-            $url = $CFG->wwwroot . '/local/flavours/index.php?action=generatedefaults_form' . 
+            $url = $CFG->wwwroot . '/local/flavours/index.php?action=generatedefaults_form' .
                    '&sesskey=' . sesskey();
             redirect($url, get_string('nothingselected', 'local_flavours'), 2);
         }
-        
+
         // Delegating to flavours_ingredient_setting
         $settingingredient = $this->instance_ingredient_type('setting');
         $phparray = $settingingredient->settings_to_php($selectedingredients['setting']);
-        
+
         // Depending on the form checkbox
         if ($overwrite) {
-            
+
 	        // Try to write file
 	        $path = $CFG->dirroot . '/local';
 	        $file = $path .'/defaults.php';
-	        
-	        if (is_writable($path) && !file_exists($file) || 
+	
+	        if (is_writable($path) && !file_exists($file) ||
 	            is_writable($file)) {
-	            
+	
 	            $fh = fopen($file, 'w');
 	            fwrite($fh, '<?php' . chr(10) . chr(10));
 	            fwrite($fh, implode(chr(10), $phparray));
 	            fclose($fh);
 
+                $info = new stdClass();
 	            $info->text = get_string('defaultsfileoverwritten', 'local_flavours');
 	            $info->class = 'notifysuccess';
 	        } else {
 	            $info->class = 'notifyproblem';
 	            $info->text = get_string('errordefaultfilenotwritable', 'local_flavours');
 	        }
-	        
+	
 	    // Add an info text to copy & paste
         } else {
             $info->text = get_string('copyandpastedefaults', 'local_flavours');

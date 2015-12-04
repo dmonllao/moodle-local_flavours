@@ -41,11 +41,11 @@ class flavours_generatedefaults_form extends moodleform implements renderable {
 
         $mform = & $this->_form;
 
-        
+
         // Warning overwrite
         $mform->addElement('header', 'settings', get_string('defaultoverwritesoptions', 'local_flavours'));
         $mform->addElement('checkbox', 'overwrite', get_string('defaultsoverwrite', 'local_flavours'));
-        
+
         // Settings
         $mform->addElement('header', 'ingredients',
             get_string('selectsettings', 'local_flavours'));
@@ -53,6 +53,7 @@ class flavours_generatedefaults_form extends moodleform implements renderable {
             $this->_customdata["treedata"].'</div>');
 
         $mform->addElement('hidden', 'action', 'generatedefaults_execute');
+        $mform->setType('action', PARAM_ALPHAEXT);
         $mform->addElement('submit', 'ingredients_submit',
             get_string('generatedefaults', 'local_flavours'));
     }

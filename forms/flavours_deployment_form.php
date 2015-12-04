@@ -58,8 +58,11 @@ class flavours_deployment_form extends moodleform implements renderable {
             $this->_customdata["treedata"].'</div>');
 
         $mform->addElement('hidden', 'overwrite');
+        $mform->setType('overwrite', PARAM_INT);
         $mform->addElement('hidden', 'flavourhash', $this->_customdata['flavourhash']);
+        $mform->setType('flavourhash', PARAM_ALPHANUMEXT);
         $mform->addElement('hidden', 'action', 'deployment_execute');
+        $mform->setType('action', PARAM_ALPHAEXT);
         $mform->addElement('submit', 'ingredients_submit',
             get_string('deployflavour', 'local_flavours'));
     }

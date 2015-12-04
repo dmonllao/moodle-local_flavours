@@ -429,6 +429,12 @@ class flavours_ingredient_setting extends flavours_ingredient {
 
         // Continue reaching the settings page
         if (!empty($treepath)) {
+
+            // If the branch does not exist (disabled features/plugins for example) we pass an empty
+            // array as we will notify the settingnosettingpage restriction to the user.
+            if (empty($systemsettings[$node]->branches)) {
+                $systemsettings[$node]->branches = array();
+            }
             $this->get_flavour_branches($treepath, $branch[$node]->branches, $systemsettings[$node]->branches);
         }
 

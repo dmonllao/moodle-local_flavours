@@ -100,6 +100,7 @@ class flavours_generatedefaults extends flavours {
 	            $info->text = get_string('defaultsfileoverwritten', 'local_flavours');
 	            $info->class = 'notifysuccess';
 	        } else {
+                $info = new stdClass();
 	            $info->class = 'notifyproblem';
 	            $info->text = get_string('errordefaultfilenotwritable', 'local_flavours');
 	        }

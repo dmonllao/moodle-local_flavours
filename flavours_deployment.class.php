@@ -231,6 +231,8 @@ class flavours_deployment extends flavours {
 
         // Finishing
         $this->unlink($flavourpath);
+
+        purge_all_caches();
     }
 
 

@@ -91,14 +91,16 @@ class flavours_deployment extends flavours {
 
         $flavourzip->close();
 
+        // Some clean up.
         $toform = new stdClass();
-        $toform->name = $xml->name[0];
-        $toform->description = $xml->description;
-        $toform->author = $xml->author;
+        $toform->name = format_string($xml->name[0]);
+        // TODO We should have the description format in the package.
+        $toform->description = format_text($xml->description, FORMAT_HTML);
+        $toform->author = format_string($xml->author);
         $toform->timecreated = userdate($xml->timecreated);
-        $toform->sourceurl = $xml->sourceurl;
-        $toform->sourcemoodlerelease = $xml->sourcemoodlerelease;
-        $toform->sourcemoodleversion = $xml->sourcemoodleversion;
+        $toform->sourceurl = clean_param($xml->sourceurl, PARAM_URL);
+        $toform->sourcemoodlerelease = format_string($xml->sourcemoodlerelease, PARAM_TEXT);
+        $toform->sourcemoodleversion = clean_param($xml->sourcemoodleversion, PARAM_INT);
 
         // Adding the over-write value from the upload flavour form and adding it as hidden
         $toform->overwrite = $formdata->overwrite;

@@ -50,7 +50,7 @@ class flavours_packaging_form extends moodleform implements renderable {
 
         $mform->addElement('htmleditor', 'description',
             get_string('flavourdescription', 'local_flavours'));
-        $mform->setType('description', PARAM_CLEANHTML);
+        $mform->setType('description', PARAM_RAW);
 
         $mform->addElement('text', 'author', get_string('flavourauthor', 'local_flavours'),
             'maxlength="154" size="40"');
